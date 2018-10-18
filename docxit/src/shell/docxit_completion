@@ -1,0 +1,21 @@
+#!/bin/bash
+# 用于 docxit 命令自动补全的 bash 脚本文件
+
+_docxit_auto_complete()
+{
+	local docxit_opts="add commit diff help init log reset status tag"
+
+    local cur prev files 
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+	files=$(ls --almost-all --indicator-style=slash)
+
+    if [[ ${prev} == "docxit" ]]
+	then
+		COMPREPLY=( $(compgen -W "${docxit_opts}" -- ${cur}) )
+	else
+		COMPREPLY=( $(compgen -W "$files" -- ${cur}) )
+	fi
+}
+
+complete -F _docxit_auto_complete docxit		# 函数名 要补全的命令名
