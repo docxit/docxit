@@ -5,12 +5,12 @@ _docxit_auto_complete()
 {
 	local docxit_opts="add commit diff help init log reset status tag"
 
-    local cur prev files 
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
+	local cur prev files 
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
 	files=$(ls --almost-all --indicator-style=slash)
 
-    if [[ ${prev} == "docxit" ]]
+	if [[ ${prev} == "docxit" ]]
 	then
 		COMPREPLY=( $(compgen -W "${docxit_opts}" -- ${cur}) )
 	else
