@@ -193,18 +193,74 @@ git write-tree 		# 根据索引库中的信息创建 tree 对象
 
 commit 对象所对应的 tree 对象永远都是工作目录的根 tree 对象。每个子目录都对应一个 tree 对象，每个文件对应一个 BLOB 对象，因此整个工作目录对应一棵 Git 对象树，根节点就是 commit  对象所引用的 tree 节点，而每个子文件夹又分别对应一棵子树。所以任何一个文件的更改，都会导致其上层所有父对象的更改和重新存储。
 
+![tree](https://git-scm.com/figures/18333fig0901-tn.png)
+
 
 
 ### commit 对象
 
-每一次 commit 都对应一个 commit 对象，而一个 commit 对象对应一个 tree 对象。创建 commit 对象需要使用如下命令：
+每一次 commit 都对应一个 commit 对象，而一个 commit 对象对应一个 tree 对象。你现在有很多 tree 对象，它们指向了要跟踪的项目的不同快照，可是先前的问题依然存在：必须记往三个 SHA-1 值以获得这些快照。你也没有关于谁、何时以及为何保存了这些快照的信息。commit 对象保存了这些基本信息。创建 commit 对象需要使用如下命令：
 
 ```shell
 # 根据 tree 对象创建 commit 对象，-p 表示前继 commit 对象
 git commit-tree key –p key2	
 ```
 
-第一次提交不需要带上 -p 选项来指明父节点。两个 commit 节点连接在一起，而不断的连接便构成了一棵树，即提交树。commit 对象中包含了与之关联的 tree 对象的 key 值，以及 author 和 committer 的信息。所创建的所有对象的关系如下图所示：
+第一次提交不需要带上 -p 选项来指明父节点。两个 commit 节点连接在一起，而不断的连接便构成了一棵树，即提交树。commit 对象中包含了与之关联的 tree 对象的 key 值，以及 author 和 committer 的信息。如：
+
+```
+author Scott Chacon <schacon@gmail.com> 1243040974 -0700
+committer Scott Chacon <schacon@gmail.com> 1243040974 -0700
+
+first commit
+```
+
+所创建的所有对象的关系如下图所示：
 
 ![](https://images2017.cnblogs.com/blog/590093/201709/590093-20170910122806647-719461561.png)
+
+
+
+
+
+## Git 引用
+
+我们需要一个文件来用一个简单的名字来记录不容易记住的 SHA-1 值，这样就可以用这些指针而不是原来的 SHA-1 值去检索了。可以使用
+
+```shell
+git update-ref refs/heads/<name> <key值>
+```
+
+来创建引用。在 `.git/refs/heads/` 目录下就会有相应名字的文件，内容为对应的 key 值。基本上 Git 中的一个分支其实就是一个指向某个工作版本一条 HEAD 记录的指针或引用。每当你执行 `git branch <分支名称>` 这样的命令，Git 基本上就是执行 `update-ref` 命令，把你现在所在分支中最后一次提交的 SHA-1 值，添加到你要创建的分支的引用。
+
+
+
+### HEAD 标记
+
+当执行 `git branch <分支名称>` 这条命令的时候，Git 要通过 HEAD 文件得到最后一次提交的 SHA-1
+值。HEAD 文件是一个指向当前所在分支的引用标识符。这样的引用标识符并不包含 SHA-1 值，而是一个指向另外一个引用的指针。如果执行 `git checkout test`，Git 就会更新 `.git/HEAD` 文件的内容为 `ref: refs/heads/test`。这时执行 `git commit` 命令，它就创建了一个 commit 对象，把这个 commit 对象的父级设置为 HEAD 指向的引用的 SHA-1 值。
+
+操作 HEAD 的低层次命令有：
+
+```shell
+git symbolic-ref HEAD					# 读取 HEAD 的值
+git symbolic-ref HEAD refs/heads/test	# 设置 HEAD 的值
+```
+
+注意，HEAD 不能设置成 refs 以外的形式
+
+
+
+### Tags
+
+Tag 对象非常像一个 commit 对象——包含一个标签，一组数据，一个消息和一个指针。最主要的区别就是 Tag 对象指向一个  commit 而不是一个 tree。它就像是一个分支引用，但是不会变化——永远指向同一个 commit，仅仅是提供一个更加友好的名字。
+
+Tag 有两种类型：annotated（可以标记任何 Git 对象） 和 lightweight （标记一个永远不变的 commit）。可以用类似下面这样的命令进行操作
+
+```shell
+git update-ref refs/tags/v1.0 <key值>	# 创建 lightweight tag
+git tag -a v1.1 <key值> -m 'test tag'	# 创建 annotated tag
+```
+
+
 
