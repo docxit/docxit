@@ -235,7 +235,7 @@ git update-ref refs/heads/<name> <key值>
 
 
 
-### HEAD 标记
+### HEAD
 
 当执行 `git branch <分支名称>` 这条命令的时候，Git 要通过 HEAD 文件得到最后一次提交的 SHA-1
 值。HEAD 文件是一个指向当前所在分支的引用标识符。这样的引用标识符并不包含 SHA-1 值，而是一个指向另外一个引用的指针。如果执行 `git checkout test`，Git 就会更新 `.git/HEAD` 文件的内容为 `ref: refs/heads/test`。这时执行 `git commit` 命令，它就创建了一个 commit 对象，把这个 commit 对象的父级设置为 HEAD 指向的引用的 SHA-1 值。
@@ -264,3 +264,18 @@ git tag -a v1.1 <key值> -m 'test tag'	# 创建 annotated tag
 
 
 
+### Remotes
+
+Git 会把最后一次推送到 remote 的每个分支的值都记录在 `refs/remotes` 目录下。Remote 引用和分支主要区别在于他们是不能被 check out 的。Git 把他们当作是标记了这些分支在服务器上最后状态的一种书签。
+
+
+
+
+
+## Git 打包
+
+Git 往磁盘保存对象时默认使用的格式叫松散对象 (loose object) 格式。Git 时不时地将这些对象打包至一个叫 packfile 的二进制文件以节省空间并提高效率。当仓库中有太多的松散对象，或是手工调用 `git gc` 命令，或推送至远程服务器时，Git 都会这样做。
+
+Git 认为未被任何 commit 引用的 blob 是 "悬空"  的，不会将它们打包进 packfile 。剩下的文件是新创建的 packfile 以及一个索引。packfile 文件包含了刚才从文件系统中移除的所有对象。索引文件包含了 packfile 的偏移信息，这样就可以快速定位任意一个指定对象。
+
+Git 打包对象时，会查找命名及尺寸相近的文件，并只保存文件不同版本之间的差异内容。`git verify-pack` 命令用于显示已打包的内容。
