@@ -25,7 +25,6 @@ install:
 	mkdir -p $(BASH_COMP_DIR)
 	cp $(SRC_DIR)$(SHELL_DIR)docxit_completion $(BASH_COMP_DIR)
 	echo "source $(BASH_COMP_DIR)docxit_completion  # docxit auto complete" >> ~/.bashrc
-	bash $(BASH_COMP_DIR)docxit_completion
 	cp $(BUILD_DIR)docxit /usr/local/bin/
 
 uninstall:
