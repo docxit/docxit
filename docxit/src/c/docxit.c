@@ -4,6 +4,8 @@
 
 int main(int argc, char *argv[])
 {
+    //TODO: alias
+
     const char *usage = "\
 Usage: docxit [--version] [--help] <command> [<args>]\n\
 \
@@ -52,7 +54,7 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
         printf("%s", version);
 	}
 	else{
-        printf("unknown option: %s\n", argv[1]);
+        printf("unknown option: %s\n%s", argv[1], usage);
 	}
 
 	return 0;
