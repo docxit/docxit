@@ -14,7 +14,9 @@ docxit: $(SRC_DIR)$(C_DIR)docxit.c
 
 
 
-.PHONY: clean install uninstall
+.PHONY: clean rebuild install uninstall
+
+rebuild: clean all
 
 clean:
 	rm -rf $(BUILD_DIR)
