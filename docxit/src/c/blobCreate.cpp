@@ -8,7 +8,8 @@ using namespace std;
 void blobCreate(char *filename)
 {
   string sha1 = valueSHA1(filename);
-  string paht = DOCXIT_PATH 
+  string f2 = 
+  string paht = DOCXIT_PATH + "/object
 }
 
 
