@@ -4,7 +4,85 @@
 
 [TOC]
 
+## index 文件格式
+
+（暂时先这样，以后可能考虑压缩存储空间。暂时不做重命名类型。暂时不考虑文件权限问题。）
+
+### 记录格式
+
+```c
+typedef enum{
+    add, remove, changed, unchanged
+}DocxitRecordKind;
+
+typedef struct{
+    DocxitRecordKind kind;
+    char name[4096];		// 相对于 docxit 管理的根目录的路径名
+    char key[40];			// 记录旧 key
+    char newkey[40];		// 记录新 key，在 add、unchanged 或 remove 中没有意义
+}DocxitRecord;
+```
+
+### 文件格式
+
+```
+n 的字符串形式<LF>
+n 个 DocxitRecord 的二进制存储
+```
+
+*注：可以考虑从固定字节处开始存放二进制的 DocxitRecord 以方便 fseek。可能需要考虑结构体对齐*
+
+
+
+## 对象格式
+
+### BLOB 对象格式
+
+直接存储二进制的 docx，暂时不压缩
+
+### tree 对象格式
+
+暂时定为
+
+```
+m n
+<filename1> <key1>
+<filename2> <key2>
+...
+<filenamem> <keym>
+<dirname1> <key1>
+<dirname2> <key2>
+...
+<dirnamen> <keyn>
+```
+
+### commit 对象格式
+
+暂时定为
+
+```
+<tree_root_key>
+<author_info>
+<date>
+<commit_message>
+<parent_commit_object_key>
+n
+<child_commit_object_key1>
+<child_commit_object_key2>
+...
+<child_commit_object_keyn>
+```
+
+
+
 ## docxit add
+
+*暂时不实现 rm，因为可以通过 add 达到同样的效果*
+
+主要任务
+
+- 获取文件 sha-1 值并将文件保存为 BLOB 对象
+- 将文件信息记录到 index 文件
 
 ### 主函数
 
@@ -16,7 +94,7 @@ sub2=>subroutine: removeIndex (<filename>)
 condret=>condition: 函数成功找到并
 删除文件记录
 fatal=>end: fatal error: 文件不存在
-op1=>operation: 对文件调用 sha1 算法求出 key
+op1=>subroutine: 对文件调用 sha1 算法求出 key
 cond=>condition: 该 key 对象是否
 已存在于 objects/
 op2=>operation: 将文件保存于 objects/ 
@@ -98,37 +176,14 @@ cond4(yes, right)->op1->e
 cond4(no)->op2->e
 ```
 
-### index 文件格式
-
-（暂时先这样，以后可能考虑压缩存储空间。暂时不做重命名类型）
-
-#### 记录格式
-
-```c
-typedef enum{
-    add, remove, changed, unchanged
-}DocxitRecordKind;
-
-typedef struct{
-    DocxitRecordKind kind;
-    char name[4096];		// 相对于 docxit 管理的根目录的路径名
-    char key[40];			// 记录旧 key
-    char newkey[40];		// 记录新 key，在 add、unchanged 或 remove 中没有意义
-}DocxitRecord;
-```
-
-#### 文件格式
-
-```
-n 的字符串形式<LF>
-n 个 DocxitRecord 的二进制存储
-```
-
-*注：可以考虑从固定字节处开始存放二进制的 DocxitRecord 以方便 fseek。可能需要考虑结构体对齐*
-
 
 
 ## docxit status
+
+主要任务：
+
+- 根据 index 文件确定是否有要提交的文件并输出相应信息
+- 根据工作区情况确定是否有未跟踪的文件并输出相应信息
 
 ### 主函数
 
@@ -174,5 +229,64 @@ conda(yes)->opc->e
 
 
 
-## git commit -m \<info\>
+## docxit commit
+
+主要任务：
+
+- 由 index 文件生成一个根 tree 对象以及其他所有需要的 tree 对象
+- 生成 commit 对象并记录根 tree对象指针和提交信息
+
+### 主函数
+
+```flow
+st=>start: docxit commit -m <info>
+op1=>operation: 访问 HEAD 文件打印分支信息
+gentree=>subroutine: root = generateTreeObject ()
+gencomm=>subroutine: generateCommitObject (root, info)
+cond=>condition: root != NULL ?
+e=>end: 结束
+op2=>operation: 无文件要提交，干净的工作区
+
+st->op1->gentree->cond
+cond(yes)->gencomm->e
+cond(no)->op2->e
+
+```
+
+### generateTreeObject
+
+```flow
+st=>start: generateTreeObject ()
+op1=>operation: 访问 index 文件读出 DocxitRecord 数组
+op2=>end: 返回根 tree 对象
+op3=>operation: 遍历 DocxitRecord 数组
+op4=>operation: 生成需要的 tree 对象
+sub=>subroutine: 调用 sha1 算法求出 key
+sub2=>subroutine: 调用函数利用 key 储存该对象
+op5=>operation: 转化所有非 unchanged 为 unchanged 对象
+cond=>condition: 有非 unchanged 记录
+fe=>end: return NULL
+
+st->op1->op3->cond(yes)->op4->sub->sub2->op5->op2
+cond(no)->fe
+
+```
+
+### generateCommitObject
+
+*暂定提交树用双向链表（树）表示，即树的双亲孩子表示法*
+
+```flow
+st=>start: generateCommitObject (root, info) 
+op1=>operation: 将 root 和 info 以及 date、author 等信息写入临时文件
+op2=>operation: 通过 HEAD 文件获得当前分支
+op3=>operation: 从 refs/heads/<分支名> 文件获得上一次的 commit 对象文件
+sub=>subroutine: 调用 sha1 算法求出 key
+sub2=>subroutine: 调用函数利用 key 储存该文件为 commit 对象
+op5=>operation: 修改两个 commit 对象文件的指针域实现双向链表插入
+op6=>operation: 修改 refs/heads/<分支名> 文件为新的 commit 对象的 key
+e=>end: 退出
+
+st->op1->sub->sub2->op2->op3->op5->e
+```
 
