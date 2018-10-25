@@ -3,8 +3,8 @@
 #include<vector>
 #include<cmath>
 #include<stack>
-
 #include<stdio.h>
+#include"sha1.h"
 
 using namespace std;
 
