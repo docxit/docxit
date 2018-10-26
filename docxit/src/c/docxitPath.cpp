@@ -5,7 +5,7 @@ string DOCXIT_PATH;//= path + '/'
 
 int docxitPath()
 {
-  ifstream fh("/home/pwtm/.docxitPath");//open root_directory-restoring file
+  ifstream fh("/home/yxy/.docxitPath");//open root_directory-restoring file
   if(!fh)
   {
       cout<< "open d_info failed" << endl;

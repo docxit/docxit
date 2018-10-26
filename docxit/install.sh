@@ -1,6 +1,4 @@
 #!/bin/bash
 
-make
-sudo make install
+make && sudo make install && source ~/.bashrc
 make clean
-source ~/.bashrc

@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include "docxitPath.h"
 
+#define EXE_DIR "/usr/local/lib/docxit/"
+
 int main(int argc, char *argv[])
 {
     //TODO: alias
@@ -21,9 +23,9 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
 
     if(!strcmp(argv[1], "init")){
         if(docxitPath())
-            printf("nested initialization not supported\n");
-        else if(execl("/usr/local/lib/docxit/init", NULL) == -1)
-            printf("fatal: cannot find /usr/local/lib/docxit/init\n");
+            printf("Nested initialization not supported\n");
+        else if(execv(EXE_DIR"init", argv) == -1)
+            perror(EXE_DIR"init");
         return 0;
 	}
 
@@ -31,6 +33,7 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
         printf("fatal: not a docxit repository\n");
         return 0;
     }
+    argv[0] = (char *)DOCXIT_PATH.c_str();
 
 	if(!strcmp(argv[1], "--help")){
         printf("%s", usage);
@@ -39,35 +42,35 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
         printf("%s", version);
 	}
 	else if(!strcmp(argv[1], "add")){
-        if(execl("/usr/local/lib/docxit/add", NULL) == -1)
-            printf("fatal: cannot find /usr/local/lib/docxit/add\n");
+        if(execv(EXE_DIR"add", argv) == -1)
+            perror(EXE_DIR"add");
 	}
 	else if(!strcmp(argv[1], "commit")){
-        if(execl("/usr/local/lib/docxit/commit", NULL) == -1)
-            printf("fatal: cannot find /usr/local/lib/docxit/commit\n");
+        if(execv(EXE_DIR"commit", argv) == -1)
+            perror(EXE_DIR"commit");
 	}
 	else if(!strcmp(argv[1], "diff")){
-        if(execl("/usr/local/lib/docxit/diff", NULL) == -1)
-            printf("fatal: cannot find /usr/local/lib/docxit/diff\n");
+        if(execv(EXE_DIR"diff", argv) == -1)
+            perror(EXE_DIR"diff");
 	}
 	else if(!strcmp(argv[1], "help")){
         printf("%s", usage);
 	}
 	else if(!strcmp(argv[1], "log")){
-        if(execl("/usr/local/lib/docxit/log", NULL) == -1)
-            printf("fatal: cannot find /usr/local/lib/docxit/log\n");
+        if(execv(EXE_DIR"log", argv) == -1)
+            perror(EXE_DIR"log");
 	}
 	else if(!strcmp(argv[1], "reset")){
-        if(execl("/usr/local/lib/docxit/reset", NULL) == -1)
-            printf("fatal: cannot find /usr/local/lib/docxit/reset\n");
+        if(execv(EXE_DIR"reset", argv) == -1)
+            perror(EXE_DIR"reset");
 	}
 	else if(!strcmp(argv[1], "status")){
-        if(execl("/usr/local/lib/docxit/status", NULL) == -1)
-            printf("fatal: cannot find /usr/local/lib/docxit/status\n");
+        if(execv(EXE_DIR"status", argv) == -1)
+            perror(EXE_DIR"status");
 	}
     else if(!strcmp(argv[1], "tag")){
-        if(execl("/usr/local/lib/docxit/tag", NULL) == -1)
-            printf("fatal: cannot find /usr/local/lib/docxit/tag\n");
+        if(execv(EXE_DIR"tag", argv) == -1)
+            perror(EXE_DIR"tag");
 	}
 	else if(!strcmp(argv[1], "version")){
         printf("%s", version);
