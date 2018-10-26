@@ -4,7 +4,7 @@
 
 [TOC]
 
-## .docxitinfo 文件格式
+## .docxitPath 文件格式
 
 该文件保存在 `/home/<username>/` 下，由 `docxit init` 创建，记录该用户所有 docxit 仓库的完整路径名，用于辨识当前位于哪个仓库中。
 
@@ -19,7 +19,7 @@
 
 ## index 文件格式
 
-（暂时先这样，以后可能考虑压缩存储空间。暂时不做重命名类型。暂时不考虑文件权限问题。）
+*暂时先这样，以后可能考虑压缩存储空间。暂时不做重命名类型。暂时不考虑文件权限问题。*
 
 该文件保存了暂存区域整个目录树的信息，记录从项目初始化到目前为止，项目仓库中所有文件文件名、sha1值等
 
@@ -115,6 +115,29 @@ op2=>end: 返回 string 对象
 
 st->sub->sub2->sub3->sub4->sub5->sub6->sub7->sub8->sub9->sub10->sub11->op->op2
 ```
+
+
+
+### docxitPath
+
+*暂时不支持仓库嵌套*
+
+- 访问 .docxitPath 文件，找到当前目录所在的仓库，将路径赋值给全局变量。
+- 返回 1 表示成功，0 表示失败。
+
+```flow
+st=>start: docxitPath()
+op1=>operation: 打开 .docxitPath 文件并读入 path 信息
+cond=>condition: 当前目录包含
+某个仓库的 path
+op2=>operation: 将仓库路径保存在全局变量 DOCXIT_PATH 中
+e=>end: return 1
+f=>end: return 0
+st->op1->cond(yes)->op2->e
+cond(no)->f
+```
+
+
 
 
 
