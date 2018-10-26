@@ -4,6 +4,15 @@
 
 [TOC]
 
+## TODO
+
+- [ ] 删除仓库的问题，每次更新 .docxitPath 删除不用的记录或通过命令
+- [ ] 自内而外的嵌套初始化仓库问题
+- [ ] 修改 `ifstream fh("/home/yxy/.docxitPath");` 为任何人都可用，且不存在文件时不应该报错
+- [ ] 添加彻底卸载功能，遍历 `.docxitPath` 删除所有仓库版本文件并最后删除 `.docxitPath`。普通的卸载不会删除这些东西，下次安装可以恢复原来的仓库。
+
+
+
 ## .docxitPath 文件格式
 
 该文件保存在 `/home/<username>/` 下，由 `docxit init` 创建，记录该用户所有 docxit 仓库的完整路径名，用于辨识当前位于哪个仓库中。
