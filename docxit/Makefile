@@ -14,7 +14,9 @@ docxit: $(SRC_DIR)$(C_DIR)docxit.c
 
 
 
-.PHONY: clean install uninstall
+.PHONY: clean rebuild install uninstall
+
+rebuild: clean all
 
 clean:
 	rm -rf $(BUILD_DIR)
@@ -23,7 +25,6 @@ install:
 	mkdir -p $(BASH_COMP_DIR)
 	cp $(SRC_DIR)$(SHELL_DIR)docxit_completion $(BASH_COMP_DIR)
 	echo "source $(BASH_COMP_DIR)docxit_completion  # docxit auto complete" >> ~/.bashrc
-	bash $(BASH_COMP_DIR)docxit_completion
 	cp $(BUILD_DIR)docxit /usr/local/bin/
 
 uninstall:

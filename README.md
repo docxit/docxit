@@ -8,12 +8,27 @@ You should install `gcc` first.
 
 If you want to manage versions for text files simultaneously, you should also install `git`.
 
-Finally, do the following steps to build from source.
+Finally, do the following steps to install:
+
+```shell
+cd docxit
+. install.sh
+```
+
+You can also build from source with:
 
 ```bash
 cd docxit
 make
 sudo make install
+source ~/.bashrc
+```
+
+You can reinstall with:
+
+```shell
+cd docxit
+. reinstall.sh
 ```
 
 ## Uninstall
