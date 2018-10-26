@@ -15,7 +15,7 @@ string valueSHA_1(string filename)
     close(pipefd[0]);
     dup2(fd, STDOUT_FILENO);
     close(fd);
-    //
+
     ((char *)buffer)[40] = '\0';
     string value_sha1 = (char *)buffer;
     free(buffer);

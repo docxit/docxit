@@ -30,9 +30,3 @@ int docxitPath()
   }
   return suc_sig;
 }
-
-int main()
-{
-    docxitPath();
-    cout << DOCXIT_PATH << endl;
-}
