@@ -24,7 +24,7 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
     if(!strcmp(argv[1], "init")){
         if(docxitPath())
             printf("Nested initialization not supported\n");
-        else if(execv(EXE_DIR"init", argv + 1) == -1)
+        else if(execv(EXE_DIR"init", argv) == -1)
             perror(EXE_DIR"init");
         return 0;
 	}
@@ -33,6 +33,7 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
         printf("fatal: not a docxit repository\n");
         return 0;
     }
+    argv[0] = (char *)DOCXIT_PATH.c_str();
 
 	if(!strcmp(argv[1], "--help")){
         printf("%s", usage);
@@ -41,34 +42,34 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
         printf("%s", version);
 	}
 	else if(!strcmp(argv[1], "add")){
-        if(execv(EXE_DIR"add", argv + 1) == -1)
+        if(execv(EXE_DIR"add", argv) == -1)
             perror(EXE_DIR"add");
 	}
 	else if(!strcmp(argv[1], "commit")){
-        if(execv(EXE_DIR"commit", argv + 1) == -1)
+        if(execv(EXE_DIR"commit", argv) == -1)
             perror(EXE_DIR"commit");
 	}
 	else if(!strcmp(argv[1], "diff")){
-        if(execv(EXE_DIR"diff", argv + 1) == -1)
+        if(execv(EXE_DIR"diff", argv) == -1)
             perror(EXE_DIR"diff");
 	}
 	else if(!strcmp(argv[1], "help")){
         printf("%s", usage);
 	}
 	else if(!strcmp(argv[1], "log")){
-        if(execv(EXE_DIR"log", argv + 1) == -1)
+        if(execv(EXE_DIR"log", argv) == -1)
             perror(EXE_DIR"log");
 	}
 	else if(!strcmp(argv[1], "reset")){
-        if(execv(EXE_DIR"reset", argv + 1) == -1)
+        if(execv(EXE_DIR"reset", argv) == -1)
             perror(EXE_DIR"reset");
 	}
 	else if(!strcmp(argv[1], "status")){
-        if(execv(EXE_DIR"status", argv + 1) == -1)
+        if(execv(EXE_DIR"status", argv) == -1)
             perror(EXE_DIR"status");
 	}
     else if(!strcmp(argv[1], "tag")){
-        if(execv(EXE_DIR"tag", argv + 1) == -1)
+        if(execv(EXE_DIR"tag", argv) == -1)
             perror(EXE_DIR"tag");
 	}
 	else if(!strcmp(argv[1], "version")){
