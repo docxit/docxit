@@ -30,4 +30,3 @@ int docxitPath()
   return suc_sig;
 }
 
-

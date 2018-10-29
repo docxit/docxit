@@ -9,3 +9,4 @@ string valueSHA_1(string filename)
     value_sha1 = value_sha1.substr(0,40);
     return value_sha1;
 }
+
