@@ -5,19 +5,18 @@ string DOCXIT_PATH;//= path + '/'
 
 int docxitPath()
 {
-  ifstream fh("/home/yxy/.docxitPath");//open root_directory-restoring file
+  ifstream fh("/home/pwtm/.docxitinfo");//open root_directory-restoring file
   if(!fh)
   {
       cout<< "open d_info failed" << endl;
       return 0;
   }
   char StrLine[LineLength];
+  char curpath[LineLength];
   string cont;
-  system("echo $PWD/ >> pwd ");
-  ifstream pwd("./pwd");//create pwd to save $PWD
-  pwd.getline(StrLine, LineLength);
-  cont = StrLine;//cont = $PWD
-  system("rm ./pwd");// delete pwd
+  getcwd(curpath, 80);
+  cont = curpath;
+  cout << "cont : " << cont << endl;
   int suc_sig = 0;
   while(fh.getline(StrLine, LineLength))//find the root directory, the r_directory is head part of $PWD
   {
