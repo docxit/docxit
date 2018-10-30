@@ -1,33 +1,42 @@
 #include"docxitPath.h"
+#include"shellCommand.h"
 
 static int LineLength = 100;
 string DOCXIT_PATH;//= path + '/'
 
-int docxitPath()
+int docxitPath()//0 = failed, 1 = find parent path, 2 = find child path
 {
-  ifstream fh("/home/pwtm/.docxitinfo");//open root_directory-restoring file
-  if(!fh)
+  string filecont = shellCommand("cat ~/.docxitPath");
+  string curpath = shellCommand("echo $PWD");
+  curpath = curpath.substr(0, curpath.length() - 1) + '/';
+  //cout << "curpath " << curpath << endl;
+  int pos = filecont.find("\n", 0);
+  string line;
+  int signal = 0;
+  while(pos != -1)
   {
-      cout<< "open d_info failed" << endl;
-      return 0;
-  }
-  char StrLine[LineLength];
-  char curpath[LineLength];
-  string cont;
-  getcwd(curpath, 80);
-  cont = curpath;
-  cout << "cont : " << cont << endl;
-  int suc_sig = 0;
-  while(fh.getline(StrLine, LineLength))//find the root directory, the r_directory is head part of $PWD
-  {
-      if(cont.find(StrLine) == 0)
+      line = filecont.substr(0, pos);
+      //cout << "line " << line << endl;
+      if(curpath.find(line) == 0)
       {
-          suc_sig = 1;
-          DOCXIT_PATH = StrLine;
+          signal = 1;
+          DOCXIT_PATH = line;
           break;
       }
+      else if(line.find(curpath) == 0)
+      {
+          signal = 2;
+          break;
+      }
+      filecont = filecont.substr(pos + 1, filecont.length());
+      //cout << "filecont " << filecont <<endl;
+      pos = filecont.find("\n", 0);
   }
-  return suc_sig;
+  return signal;
+}
+int main()
+{
+    cout << docxitPath();
 }
 
 
