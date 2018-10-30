@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1540882052 source:/home/pwtm/docxit/docxit/src/c/docxitPath.cpp
+	"docxitPath.h"
+	"shellCommand.h"
+
+1540619120 /home/pwtm/docxit/docxit/src/c/docxitPath.h
+	<iostream>
+	<fstream>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+
+1540620046 source:/home/pwtm/docxit/docxit/src/c/shellCommand.cpp
+	"shellCommand.h"
+
+1540618773 /home/pwtm/docxit/docxit/src/c/shellCommand.h
+	<iostream>
+	<string>
+
