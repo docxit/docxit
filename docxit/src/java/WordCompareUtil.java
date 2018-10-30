@@ -51,31 +51,27 @@ import docxit.diff_match_patch.*;
 
 public class WordCompareUtil {
 
-
     private static BigInteger commentId = BigInteger.valueOf(1);
 
     public static void main(String[] args) throws Exception {
         WordCompareUtil cp = new WordCompareUtil();
-        String f0 = args[0];
-        String f1 = args[1];
-        cp.compare(new File(f0), new File(f1), args[2]);
+        cp.compare(new File(args[0]), new File(args[1]), args[2]);
     }
 
     public static Boolean compare(File source,File target,String out) throws Exception{
-        WordprocessingMLPackage wordMLPackage0 = getTemplate(new FileInputStream(source));
+        WordprocessingMLPackage wordMLPackage0 = WordprocessingMLPackage.load(new FileInputStream(source));
         MainDocumentPart mp0 = wordMLPackage0.getMainDocumentPart();
         ObjectFactory factory0 = Context.getWmlObjectFactory();
         List<Object> objList0 = wordMLPackage0.getMainDocumentPart().getContent();
-        System.out.println(objList0.size());
 
-        WordprocessingMLPackage wordMLPackage1 = getTemplate(new FileInputStream(target));
+        WordprocessingMLPackage wordMLPackage1 = WordprocessingMLPackage.load(new FileInputStream(target));
         MainDocumentPart mp1 = wordMLPackage1.getMainDocumentPart();
         ObjectFactory factory1 = Context.getWmlObjectFactory();
         List<Object> objList1 = wordMLPackage1.getMainDocumentPart().getContent();
-        System.out.println(objList1.size());
 
         Comments comments = addDocumentCommentsPart(wordMLPackage0, factory0);
         if(objList0.size()!=objList1.size()){
+        	System.out.println("ERROR:段落不一致");
             return false;
         }
         int objSize = objList0.size();  
@@ -133,9 +129,8 @@ public class WordCompareUtil {
 
     public void createComment(WordprocessingMLPackage wordMLPackage, MainDocumentPart t, ObjectFactory factory,P p,RPr fontRPr,List<Vo> list,Comments comments)
             throws Exception {
-    	RPr commentRPr = getRPrStyle(factory, "微软雅黑", "41A62D", "18", STHint.EAST_ASIA, true, true, false, false, null,
+        RPr commentRPr = getRPrStyle(factory, "微软雅黑", "41A62D", "18", STHint.EAST_ASIA, true, true, false, false, null,
                 null, false, null, false, null, null, null);
-
         createCommentRound(factory, p, fontRPr, comments, list);
     }
 
@@ -414,12 +409,6 @@ public class WordCompareUtil {
 
     public void saveWordPackage(WordprocessingMLPackage wordPackage, File file) throws Exception {
         wordPackage.save(file);
-    }
-
-    public static WordprocessingMLPackage getTemplate(FileInputStream is)
-            throws Docx4JException, FileNotFoundException {
-        WordprocessingMLPackage template = WordprocessingMLPackage.load(is);
-        return template;
     }
 
     public static void writeDocxToStream(WordprocessingMLPackage template,
