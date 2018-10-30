@@ -39,4 +39,3 @@ int main()
     cout << docxitPath();
 }
 
-
