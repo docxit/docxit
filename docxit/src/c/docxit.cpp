@@ -29,7 +29,8 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
         return 0;
 	}
 
-	if(!docxitPath()){
+	int isrepo = docxitPath();
+	if(isrepo == 0 || isrepo == 2){
         printf("fatal: not a docxit repository\n");
         return 0;
     }
