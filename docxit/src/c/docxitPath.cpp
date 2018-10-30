@@ -1,7 +1,6 @@
 #include"docxitPath.h"
 #include"shellCommand.h"
 
-static int LineLength = 100;
 string DOCXIT_PATH;//= path + '/'
 
 int docxitPath()//0 = failed, 1 = find parent path, 2 = find child path
@@ -33,9 +32,5 @@ int docxitPath()//0 = failed, 1 = find parent path, 2 = find child path
       pos = filecont.find("\n", 0);
   }
   return signal;
-}
-int main()
-{
-    cout << docxitPath();
 }
 

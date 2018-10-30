@@ -14,7 +14,7 @@ all: build docxit init
 build:
 	mkdir -p $(BUILD_DIR)
 
-docxit: $(SRC_DIR)$(C_DIR)docxit.cpp $(BUILD_DIR)docxitPath.o
+docxit: $(SRC_DIR)$(C_DIR)docxit.cpp $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellCommand.o
 	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
 
 init: $(SRC_DIR)$(C_DIR)init.c
@@ -22,6 +22,9 @@ init: $(SRC_DIR)$(C_DIR)init.c
 
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@ 
+
+$(BUILD_DIR)shellCommand.o: $(SRC_DIR)$(C_DIR)shellCommand.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
 
 .PHONY: clean rebuild install uninstall
 
