@@ -106,3 +106,6 @@
 
 
 
+### how to implete
+
+在本函数中通过调用linux下自带的shell命令 `sha1sum filename`会返回文件的sha1值，通过函数shellcommand会返回shell命令的标准输出，从而获得文件的sha1值。
