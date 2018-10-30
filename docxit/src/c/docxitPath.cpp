@@ -5,7 +5,7 @@ string DOCXIT_PATH;//= path + '/'
 
 int docxitPath()//0 = failed, 1 = find parent path, 2 = find child path
 {
-  string filecont = shellCommand("cat ~/.docxitPath");
+  string filecont = shellCommand("[ -f ~/.docxitPath ] || touch ~/.docxitPath ; cat ~/.docxitPath");
   string curpath = shellCommand("echo $PWD");
   curpath = curpath.substr(0, curpath.length() - 1) + '/';
   //cout << "curpath " << curpath << endl;
