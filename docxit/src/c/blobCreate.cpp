@@ -1,9 +1,6 @@
-#include<iostream>
-#include<stdlib.h>
-#include<string>
-#include"docxitPath"
+#include"docxitPath.h"
+#include"blobCreate.h"
 
-using namespace std;
 //create a blob object to the file depending on it's sha-1 value
 void blobCreate(string filename, string value_sha1)
 {

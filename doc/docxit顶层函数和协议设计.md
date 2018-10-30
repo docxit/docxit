@@ -9,9 +9,7 @@
 - [ ] 删除仓库的问题，每次更新 .docxitPath 删除不用的记录或通过命令
 - [ ] 自内而外的嵌套初始化仓库问题
 - [ ] 修改 `ifstream fh("/home/yxy/.docxitPath");` 为任何人都可用，且不存在文件时不应该报错
-- [x] 添加彻底卸载功能，遍历 `.docxitPath` 删除所有仓库版本文件并最后删除 `.docxitPath`。普通的卸载不会删除这些东西，下次安装可以恢复原来的仓库。
-- [ ] `docxit commit` 中的创建 tree 和 commit 对象的算法
-- [ ] `getcwd()` 获取当前工作路径
+- [ ] 添加彻底卸载功能，遍历 `.docxitPath` 删除所有仓库版本文件并最后删除 `.docxitPath`。普通的卸载不会删除这些东西，下次安装可以恢复原来的仓库。
 
 
 
@@ -150,26 +148,6 @@ cond(no)->f
 
 
 
-### blobCreate
-
-*暂时不压缩，原样存储*
-
-- 为参数中的文件，根据参数给出的 key 值，在对应的 object/ 下的位置创建 BOLB 对象
-- 已存在相同文件则跳过
-
-```flow
-st=>start: blobCreate(string filename, string value_sha1)
-op1=>condition: 该 key 值对应的对象
-是否已经存在
-op2=>operation: 在 object/value_sha1[0-1]/value_sha1[2-39]
-下创建表示文件的 BLOB 对象
-e=>end: 退出
-st->op1(no)->op2->e
-op1(yes)->e
-```
-
-
-
 
 
 ## docxit add
@@ -191,16 +169,20 @@ sub2=>subroutine: removeIndex (<filename>)
 condret=>condition: 函数成功找到并
 删除文件记录
 fatal=>end: fatal error: 文件不存在
-op1=>subroutine: key = value_SHA1(<filename>)
-op2sub=>subroutine: blobCreate(<filename>, key)
+op1=>subroutine: 对文件调用 sha1 算法求出 key
+cond=>condition: 该 key 对象是否
+已存在于 objects/
+op2=>operation: 将文件保存于 objects/ 
+下合适位置（不压缩）
 sub1=>subroutine: addIndex (<filename>, <key>)
 其中 <filename> 参数可包含路径名
 e=>end: end
 
-st->cond1(yes)->op1->op2sub
+st->cond1(yes)->op1->cond
 cond1(no)->sub2->condret(no, down)->fatal
 condret(yes)->e
-op2sub->sub1->e
+cond(yes)->sub1
+cond(no, down)->op2->sub1->e
 ```
 
 ### addIndex
@@ -354,8 +336,8 @@ op1=>operation: 访问 index 文件读出 DocxitRecord 数组
 op2=>end: 返回根 tree 对象
 op3=>operation: 遍历 DocxitRecord 数组
 op4=>operation: 生成需要的 tree 对象
-sub=>subroutine: key = value_SHA1(filename)
-sub2=>subroutine: createBlob(filename, key)
+sub=>subroutine: 调用 sha1 算法求出 key
+sub2=>subroutine: 调用函数利用 key 储存该对象
 op5=>operation: 转化所有非 unchanged 为 unchanged 对象
 cond=>condition: 有非 unchanged 记录
 fe=>end: return NULL

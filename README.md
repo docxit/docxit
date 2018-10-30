@@ -33,9 +33,18 @@ cd docxit
 
 ## Uninstall
 
+If you want to uninstall docxit but preserve your existing repositories (you can reinstall docxit whenever you like) , you should execute:
+
 ```bash
 cd docxit
 sudo make uninstall
+```
+
+If you want to uninstall docxit permanently, that is to say, you want to remove all the existing docxit repositories (.docxit directories but not workspaces, unable to recover) , you should execute:
+
+```shell
+cd docxit
+./uninstall_permanently.sh
 ```
 
 ## Team Members
