@@ -4,3 +4,5 @@ build/
 *.layout
 .docxit/
 *.depend
+bin/
+debug/
