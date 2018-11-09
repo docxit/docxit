@@ -8,8 +8,9 @@ listDir(){
 		cd $1
 		dirfiles=$(ls | sed "s:^:`pwd`/: ")
 	else
-		file=$(ls $1 | sed "s:^:`pwd`/: ")
-		echo "$file"		# here
+		file=$(echo $1 | sed "s:^:`pwd`/: ")	# you can change 'echo' to 'ls' for error test
+		# echo "$file"		# here
+		[[ -f $file ]] && /usr/local/lib/docxit/addIndex $file || /usr/local/lib/docxit/removeIndex $file
 		return
 	fi
 
@@ -19,7 +20,8 @@ listDir(){
 		then
 			listDir $i 
 		else
-			echo "$i"		# here
+			# echo "$i"		# here
+			/usr/local/lib/docxit/addIndex $i
 		fi
 	done
 }

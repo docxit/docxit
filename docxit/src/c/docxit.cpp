@@ -36,7 +36,13 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
         case 'a':
             if(!strcmp(cur, "dd")){
                 checkDocxitPath(argv);
-                if(execv(EXE_DIR"add", argv) == -1){
+
+                if(argc < 3){
+                    printf("nothing added\nmaybe you need 'git add .'?\n");
+                    exit(0);
+                }
+
+                if(execv(EXE_DIR"add", argv + 1) == -1){
                     perror(EXE_DIR"add");
                     exit(0);
                 }
