@@ -7,6 +7,7 @@
 #define EXE_DIR "/usr/local/lib/docxit/"
 
 static void checkDocxitPath(char *argv[]){
+	system(EXE_DIR"updateDocxitPath.sh");
     int isrepo = docxitPath();
 	if(isrepo == 0 || isrepo == 2){
         printf("fatal: not a docxit repository\n");
@@ -141,6 +142,7 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
 
         case 'i':
             if(!strcmp(cur, "nit")){
+				system(EXE_DIR"updateDocxitPath.sh");
                 if(docxitPath())
                     printf("Nested initialization not supported\n");
                 else if(execv(EXE_DIR"init", argv) == -1)

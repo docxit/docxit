@@ -37,6 +37,7 @@ install:
 	mkdir -p $(BASH_COMP_DIR)
 	mkdir -p $(EXE_DIR)
 	cp $(SRC_DIR)$(SHELL_DIR)docxit_completion $(BASH_COMP_DIR)
+	cp $(SRC_DIR)$(SHELL_DIR)updateDocxitPath.sh $(EXE_DIR)
 	echo "source $(BASH_COMP_DIR)docxit_completion  # docxit auto complete" >> ~/.bashrc
 	cp $(BUILD_DIR)docxit $(MY_PATH)
 	cp $(BUILD_DIR)init $(EXE_DIR)init
