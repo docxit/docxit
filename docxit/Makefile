@@ -9,7 +9,7 @@ BASH_COMP_DIR=/etc/bash_completion.d/
 EXE_DIR=/usr/local/lib/docxit/
 MY_PATH=/usr/local/bin/
 
-all: build docxit init deinit
+all: build docxit init deinit addIndex removeIndex
 
 build:
 	mkdir -p $(BUILD_DIR)
@@ -21,6 +21,12 @@ init: $(SRC_DIR)$(C_DIR)init.c
 	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
 
 deinit: $(SRC_DIR)$(C_DIR)deinit.c
+	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
+
+addIndex: $(SRC_DIR)$(C_DIR)addIndex.c
+	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
+
+removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c
 	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
 
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
@@ -41,10 +47,13 @@ install:
 	mkdir -p $(EXE_DIR)
 	cp $(SRC_DIR)$(SHELL_DIR)docxit_completion $(BASH_COMP_DIR)
 	cp $(SRC_DIR)$(SHELL_DIR)updateDocxitPath.sh $(EXE_DIR)
+	cp $(SRC_DIR)$(SHELL_DIR)listAllFiles.sh $(EXE_DIR)add
 	echo "source $(BASH_COMP_DIR)docxit_completion  # docxit auto complete" >> ~/.bashrc
 	cp $(BUILD_DIR)docxit $(MY_PATH)
 	cp $(BUILD_DIR)init $(EXE_DIR)init
 	cp $(BUILD_DIR)deinit $(EXE_DIR)deinit
+	cp $(BUILD_DIR)addIndex $(EXE_DIR)addIndex
+	cp $(BUILD_DIR)removeIndex $(EXE_DIR)removeIndex
 
 uninstall:
 	-rm -f $(BASH_COMP_DIR)docxit_completion
