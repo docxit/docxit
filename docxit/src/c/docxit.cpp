@@ -13,7 +13,7 @@ static void checkDocxitPath(char *argv[]){
         printf("fatal: not a docxit repository\n");
         exit(0);
     }
-    argv[0] = (char *)DOCXIT_PATH.c_str();
+    argv[1] = (char *)DOCXIT_PATH.c_str();
 }
 
 int main(int argc, char *argv[])
@@ -117,18 +117,40 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
             }
 
         case 'd':
-            if(!strcmp(cur, "iff")){
-                checkDocxitPath(argv);
-                if(execv(EXE_DIR"diff", argv) == -1){
-                    perror(EXE_DIR"diff");
+            switch(*cur ++){
+                case 'e':
+                    if(!strcmp(cur, "init")){
+                        checkDocxitPath(argv);
+                        if(execv(EXE_DIR"deinit", argv) == -1){
+                            perror(EXE_DIR"deinit");
+                            exit(0);
+                        }
+                    }
+                    else{
+                        printf("unknown option: %s\n%s", argv[1], usage);
+                        printf("the most similar command is %s\n", "deinit");
+                        exit(0);
+                    }
+
+                case 'i':
+                    if(!strcmp(cur, "ff")){
+                        checkDocxitPath(argv);
+                        if(execv(EXE_DIR"diff", argv) == -1){
+                            perror(EXE_DIR"diff");
+                            exit(0);
+                        }
+                    }
+                    else{
+                        printf("unknown option: %s\n%s", argv[1], usage);
+                        printf("the most similar command is %s\n", "diff");
+                        exit(0);
+                    }
+
+                default:
+                    printf("unknown option: %s\n%s", argv[1], usage);
                     exit(0);
-                }
             }
-            else{
-                printf("unknown option: %s\n%s", argv[1], usage);
-                printf("the most similar command is %s\n", "diff");
-                exit(0);
-            }
+
 
         case 'h':
             if(!strcmp(cur, "elp")){

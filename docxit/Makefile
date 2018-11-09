@@ -9,7 +9,7 @@ BASH_COMP_DIR=/etc/bash_completion.d/
 EXE_DIR=/usr/local/lib/docxit/
 MY_PATH=/usr/local/bin/
 
-all: build docxit init
+all: build docxit init deinit
 
 build:
 	mkdir -p $(BUILD_DIR)
@@ -18,6 +18,9 @@ docxit: $(SRC_DIR)$(C_DIR)docxit.cpp $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellC
 	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
 
 init: $(SRC_DIR)$(C_DIR)init.c
+	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
+
+deinit: $(SRC_DIR)$(C_DIR)deinit.c
 	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
 
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
@@ -41,6 +44,7 @@ install:
 	echo "source $(BASH_COMP_DIR)docxit_completion  # docxit auto complete" >> ~/.bashrc
 	cp $(BUILD_DIR)docxit $(MY_PATH)
 	cp $(BUILD_DIR)init $(EXE_DIR)init
+	cp $(BUILD_DIR)deinit $(EXE_DIR)deinit
 
 uninstall:
 	-rm -f $(BASH_COMP_DIR)docxit_completion
