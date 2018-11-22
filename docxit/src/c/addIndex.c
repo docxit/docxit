@@ -4,15 +4,19 @@
 #include "indexOp.h"
 
 int main(int argc, char *argv[]){
-    if(argc != 2){
-        printf("fatal error: argc error in addIndex.c\n");
+    if(argc < 2){
+        printf("nothing is added\n");
         exit(0);
     }
 
-    const char *filename = argv[1];
+    int i;
+    for(i = 1; i < argc; i ++){
+        const char *filename = argv[i];
 
-    // replace this printf with function implemention
-    printf("add %s\n", filename);
+        // replace this printf with function implemention
+        printf("add %s\n", filename);
+
+    }
 
     return 0;
 }

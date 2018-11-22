@@ -10,7 +10,7 @@ listDir(){
 	else
 		file=$(echo $1 | sed "s:^:`pwd`/: ")	# you can change 'echo' to 'ls' for error test
 		# echo "$file"		# here
-		[[ -f $file ]] && /usr/local/lib/docxit/addIndex $file || /usr/local/lib/docxit/removeIndex $file
+		[[ -f $file ]] && addfile=$addfile" $file" || removefile=$removefile" $file"
 		return
 	fi
 
@@ -21,7 +21,8 @@ listDir(){
 			listDir $i 
 		else
 			# echo "$i"		# here
-			/usr/local/lib/docxit/addIndex $i
+			addfile=$addfile" $i"
+			
 		fi
 	done
 }
@@ -32,9 +33,14 @@ then
 fi
 
 rootdir=$PWD
+addfile=""
+removefile=""
 
 for j in "$@"
 do
 	cd $rootdir
 	listDir $j
 done
+
+/usr/local/lib/docxit/addIndex $addfile
+/usr/local/lib/docxit/removeIndex $removefile
