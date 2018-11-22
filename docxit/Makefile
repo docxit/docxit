@@ -19,21 +19,31 @@ docxit: $(SRC_DIR)$(C_DIR)docxit.cpp $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellC
 
 init: $(SRC_DIR)$(C_DIR)init.c
 	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
-
+	
 deinit: $(SRC_DIR)$(C_DIR)deinit.c
 	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
 
-addIndex: $(SRC_DIR)$(C_DIR)addIndex.c
-	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
+addIndex: $(SRC_DIR)$(C_DIR)addIndex.cpp $(BUILD_DIR)sha1.o $(BUILD_DIR)blobCreate.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)docxitPath.o
+	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@ -lpthread 
 
-removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c
-	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ 
+removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c $(BUILD_DIR)indexOp.o
+	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ -lpthread
 
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@ 
 
 $(BUILD_DIR)shellCommand.o: $(SRC_DIR)$(C_DIR)shellCommand.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
+
+$(BUILD_DIR)indexOp.o: $(SRC_DIR)$(C_DIR)indexOp.c
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+$(BUILD_DIR)blobCreate.o: $(SRC_DIR)$(C_DIR)blobCreate.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
+
+$(BUILD_DIR)sha1.o: $(SRC_DIR)$(C_DIR)sha1.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
+
 
 .PHONY: clean rebuild install uninstall
 

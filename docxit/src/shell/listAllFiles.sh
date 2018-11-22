@@ -38,9 +38,11 @@ removefile=""
 
 for j in "$@"
 do
+	if [[ $j == $1 ]]; then continue
+	fi
 	cd $rootdir
 	listDir $j
 done
 
-/usr/local/lib/docxit/addIndex $addfile
-/usr/local/lib/docxit/removeIndex $removefile
+/usr/local/lib/docxit/addIndex $1 $addfile
+/usr/local/lib/docxit/removeIndex $1 $removefile

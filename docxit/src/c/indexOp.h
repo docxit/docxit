@@ -5,11 +5,16 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 #define RECORDS_INIT_SIZE 50
 #define RECORDS_INCREMENT 10
 #define MAX_NAME_LENGTH 256
+#define INDEX_FILE_NAME "index"
 
-#define DEBUG
+//#define DEBUG
 
 typedef enum{
     add, removed, changed, unchanged, nonexisting
@@ -118,5 +123,9 @@ void writeRecordsToFile(const char *indexFileName, Records rec);
 #ifdef DEBUG
 void printRecords(Records rec);
 #endif // DEBUG
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif
