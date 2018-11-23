@@ -6,3 +6,4 @@ build/
 *.depend
 bin/
 debug/
+index
