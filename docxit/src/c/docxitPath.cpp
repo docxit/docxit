@@ -1,5 +1,6 @@
 #include"docxitPath.h"
 #include"shellCommand.h"
+#include"configOp.h"
 
 string DOCXIT_PATH;//= path + '/'
 
