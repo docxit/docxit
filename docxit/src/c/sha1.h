@@ -10,5 +10,6 @@
 using namespace std;
 
 string valueSHA_1(string filename);
+// filename should be full path
 
 #endif

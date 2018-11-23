@@ -8,5 +8,7 @@
 using namespace std;
 
 void blobCreate(string filename, string value_sha1);
+// filename should be full path
+
 
 #endif//__BLOB_CREATE_H__

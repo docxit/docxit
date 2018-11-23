@@ -42,7 +42,7 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
                     exit(0);
                 }
 
-                if(execv(EXE_DIR"add", argv + 1) == -1){
+                if(execv(EXE_DIR"add", argv) == -1){
                     perror(EXE_DIR"add");
                     exit(0);
                 }
