@@ -9,6 +9,7 @@
 
 static Records rec;
 static pthread_mutex_t mutex;
+static const char *docxitrootpath;
 
 static void *addfile(void *filenameptr){
     string filename = (const char *)filenameptr;
@@ -16,7 +17,7 @@ static void *addfile(void *filenameptr){
     string sha1 = valueSHA_1(filename);
     const char *ckey = sha1.c_str();
 
-    blobCreate(filename, sha1);
+    blobCreate(filename, sha1, docxitrootpath);
     RecordPtr recptr = getPtrOfDocxitRecord(rec, cfilename);
 
     if(recptr == NULL){     // not found
@@ -80,6 +81,8 @@ int main(int argc, char *argv[]){
     strcat(path, argv[1]);
     strcat(path, ".docxit/");
     strcat(path, INDEX_FILE_NAME);
+
+    docxitrootpath = argv[1];
 
     rec = openIndex(path);       // get record array
 
