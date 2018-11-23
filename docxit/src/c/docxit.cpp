@@ -38,7 +38,7 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
                 checkDocxitPath(argv);
 
                 if(argc < 3){
-                    printf("nothing added\nmaybe you need 'git add .'?\n");
+                    printf("nothing added\nmaybe you need 'docxit add .'?\n");
                     exit(0);
                 }
 

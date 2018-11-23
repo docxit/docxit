@@ -37,7 +37,12 @@ int main(int argc, char *argv[]){
         exit(0);
     }
 
-    rec = openIndex(INDEX_FILE_NAME);       // get record array
+    char path[4096] = {'\0'};
+    strcat(path, argv[1]);
+    strcat(path, ".docxit/");
+    strcat(path, INDEX_FILE_NAME);
+
+    rec = openIndex(path);       // get record array
 
     pthread_mutex_init(&mutex, NULL);       // init mutex lock
 
@@ -61,11 +66,7 @@ int main(int argc, char *argv[]){
         else printf("%s: cannot find file\n", argv[i]);
     }
 
-    char path[4096] = {'\0'};
-    strcat(path, argv[1]);
-    strcat(path, ".docxit/");
-    strcat(path, INDEX_FILE_NAME);
-    writeRecordsToFile(INDEX_FILE_NAME, rec);
+    writeRecordsToFile(path, rec);
 
     free(threads);
     return 0;
