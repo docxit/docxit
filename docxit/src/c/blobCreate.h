@@ -9,6 +9,6 @@ using namespace std;
 
 void blobCreate(string filename, string value_sha1, const char* docxitrootpath);
 // filename should be full path
-
+void blobCreateMv(string filename, string value_sha1, const char* docxitrootpath);
 
 #endif//__BLOB_CREATE_H__
