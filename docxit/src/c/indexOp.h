@@ -120,6 +120,8 @@ void deleteDocxitRecordByPtr(RecordPtr ptr);
 
 void writeRecordsToFile(const char *indexFileName, Records rec);
 
+int commitIndex(const char *indexFileName);
+
 #ifdef DEBUG
 void printRecords(Records rec);
 #endif // DEBUG
