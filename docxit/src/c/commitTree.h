@@ -10,7 +10,7 @@ CommitStruct *createCommitStruct(const char *key, const char *message);
 //create a file that records commit key, author, commit time and commit message
 //create the file's blob obj and return it's key value
 
-void writeCommitStructToFile(CommitFile *cf, const char *filename);
+void writeCommitStructToFile(const CommitFile *cf, const char *filename);
 
 void freeCommitStruct(CommitStruct **cs);
 
