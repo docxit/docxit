@@ -1,6 +1,6 @@
 CC=gcc
 CXX=g++
-CFLAGS=-Wall
+CFLAGS=-Wall -g
 BUILD_DIR=./build/
 SRC_DIR=./src/
 C_DIR=c/
