@@ -14,8 +14,6 @@ extern "C" {
 #define MAX_NAME_LENGTH 256
 #define INDEX_FILE_NAME "index"
 
-#define DEBUG
-
 typedef enum{
     add, removed, changed, unchanged, nonexisting
 }DocxitRecordKind;

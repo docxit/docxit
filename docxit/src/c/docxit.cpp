@@ -7,7 +7,10 @@
 #define EXE_DIR "/usr/local/lib/docxit/"
 
 static void checkDocxitPath(char *argv[]){
-	system(EXE_DIR"updateDocxitPath.sh");
+	if(system(EXE_DIR"updateDocxitPath.sh") == -1){
+        printf("fatal: %s: cannot execute file\n", "updateDocxitPath.sh");
+        exit(0);
+	}
     int isrepo = docxitPath();
 	if(isrepo == 0 || isrepo == 2){
         printf("fatal: not a docxit repository\n");
@@ -19,11 +22,55 @@ static void checkDocxitPath(char *argv[]){
 int main(int argc, char *argv[])
 {
     //TODO: alias
-
+#ifndef DEBUG
     const char *usage = "\
 Usage: docxit [--version] [--help] <command> [<args>]\n\
+\n\
+commands:\n\
+    add         docxit add <file1> [<file2> ...]            add or remove files to index\n\
+    commit      docxit commit -m \"<commit_message>\"       ???\n\
+    diff        docxit diff ???                             ???\n\
+    log         docxit log                                  ???\n\
+    status      docxit status                               ???\n\
+    branch      docxit branch [-d] <branch_name>            ???\n\
+    config      docxit config ???                           ???\n\
+    help        docxit help [<command_name>]                show detailed docxit manual\n\
+    merge       docxit merge -m \"<message>\" <branch_name> ???\n\
+    tag         docxit tag \"<tag_name>\" [<commit_value>]  ???\n\
+    checkout    docxit checkout [-b] <new_branch_name>      ???\n\
+    deinit      docxit deinit                               delete docxit repository\n\
+    init        docxit init                                 init docxit repository at current directory\n\
+    reset       docxit reset ???                            ???\n\
+    version     docxit version                              show docxit version info\n\
 \
 ";
+#else
+    const char *usage = "\
+Usage: docxit [--version] [--help] <command> [<args>]\n\
+Debug: <debug_command> [<args>]\n\
+\n\
+commands:\n\
+    add         docxit add <file1> [<file2> ...]            add or remove files to index\n\
+    commit      docxit commit -m \"<commit_message>\"       ???\n\
+    diff        docxit diff ???                             ???\n\
+    log         docxit log                                  ???\n\
+    status      docxit status                               ???\n\
+    branch      docxit branch [-d] <branch_name>            ???\n\
+    config      docxit config ???                           ???\n\
+    help        docxit help [<command_name>]                show detailed docxit manual\n\
+    merge       docxit merge -m \"<message>\" <branch_name> ???\n\
+    tag         docxit tag \"<tag_name>\" [<commit_value>]  ???\n\
+    checkout    docxit checkout [-b] <new_branch_name>      ???\n\
+    deinit      docxit deinit                               delete docxit repository\n\
+    init        docxit init                                 init docxit repository at current directory\n\
+    reset       docxit reset ???                            ???\n\
+    version     docxit version                              show docxit version info\n\
+\n\
+debug_commands:\n\
+    printIndex          print the index file in a docxit repository\n\
+\
+";
+#endif
     const char *version = "docxit version 1.0.0\n";
 
     if(argc <= 1){
@@ -170,7 +217,10 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
 
         case 'i':
             if(!strcmp(cur, "nit")){
-				system(EXE_DIR"updateDocxitPath.sh");
+				if(system(EXE_DIR"updateDocxitPath.sh") == -1){
+                    printf("fatal: %s: cannot execute file\n", "updateDocxitPath.sh");
+                    exit(0);
+                }
                 if(docxitPath())
                     printf("Nested initialization not supported\n");
                 else if(execv(EXE_DIR"init", argv) == -1)
