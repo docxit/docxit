@@ -2,13 +2,20 @@
 #include<stdlib.h>
 
 //init docxit rego
-void docxitInit()
+static void docxitInit()
 {
-  system("mkdir $PWD/.docxit");//creat rego
-  system("mkdir $PWD/.docxit/object");//create folder objects to hold all history version files
-	system("touch $PWD/.docxit/HEAD");//create file HEAD to hold current version pointer
-	system("touch $PWD/.docxit/index");//create file index to be the stage
- system("echo $PWD/ >> ~/.docxitPath");
+	if(system("mkdir -p $PWD/.docxit/object") == -1){  //create folder objects to hold all history version files
+        printf("fatal: mkdir failed\n");
+        exit(0);
+	}
+	if(system("touch $PWD/.docxit/HEAD $PWD/.docxit/index") == -1){
+        printf("fatal: touch failed\n");
+        exit(0);
+	}
+	if(system("echo $PWD/ >> ~/.docxitPath") == -1){
+        printf("fatal: echo failed\n");
+        exit(0);
+	}
 }
 
 int main()

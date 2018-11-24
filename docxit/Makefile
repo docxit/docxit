@@ -1,6 +1,6 @@
+mode=release
 CC=gcc
 CXX=g++
-CFLAGS=-Wall -g
 BUILD_DIR=./build/
 SRC_DIR=./src/
 C_DIR=c/
@@ -9,7 +9,13 @@ BASH_COMP_DIR=/etc/bash_completion.d/
 EXE_DIR=/usr/local/lib/docxit/
 MY_PATH=/usr/local/bin/
 
+ifeq ($(mode), debug)
+all: build docxit init deinit addIndex removeIndex commit printIndex
+CFLAGS=-Wall -g -DDEBUG
+else
 all: build docxit init deinit addIndex removeIndex commit
+CFLAGS=-Wall -O3
+endif
 
 build:
 	mkdir -p $(BUILD_DIR)
@@ -32,6 +38,9 @@ commit: $(SRC_DIR)$(C_DIR)commit.cpp $(BUILD_DIR)sha1.o $(BUILD_DIR)blobCreate.o
 removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c $(BUILD_DIR)indexOp.o
 	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ -lpthread
 
+printIndex: $(SRC_DIR)$(C_DIR)printIndex.cpp $(BUILD_DIR)indexOp.o $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellCommand.o
+	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@
+
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@ 
 
@@ -50,14 +59,20 @@ $(BUILD_DIR)sha1.o: $(SRC_DIR)$(C_DIR)sha1.cpp
 $(BUILD_DIR)commitTree.o: $(SRC_DIR)$(C_DIR)commitTree.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
-.PHONY: clean rebuild install uninstall
+.PHONY: clean rebuild install install_debug install_release uninstall
 
 rebuild: clean all
 
 clean:
 	rm -rf $(BUILD_DIR)
 
-install:
+ifeq ($(mode), debug)
+install: install_release install_debug
+else
+install: install_release
+endif
+
+install_release:
 	mkdir -p $(BASH_COMP_DIR)
 	mkdir -p $(EXE_DIR)
 	cp $(SRC_DIR)$(SHELL_DIR)docxit_completion $(BASH_COMP_DIR)
@@ -71,8 +86,11 @@ install:
 	cp $(BUILD_DIR)removeIndex $(EXE_DIR)removeIndex
 	cp $(BUILD_DIR)commit $(EXE_DIR)commit
 
+install_debug:
+	cp $(BUILD_DIR)printIndex $(MY_PATH)
+
 uninstall:
 	-rm -f $(BASH_COMP_DIR)docxit_completion
 	sed -i '/# docxit auto complete/d' ~/.bashrc
-	-rm -f $(MY_PATH)docxit
+	-rm -f $(MY_PATH)docxit $(MY_PATH)printIndex
 	-rm -rf $(EXE_DIR)

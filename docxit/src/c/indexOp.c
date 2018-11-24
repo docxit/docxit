@@ -24,7 +24,10 @@ Records openIndex(const char *indexFileName){
         printf("fatal error: malloc failed\n");
         exit(0);
     }
-    fread(p, sizeof(DocxitRecord), fileSize, fp);
+    if(fread(p, sizeof(DocxitRecord), fileSize, fp) == 0){
+        printf("fatal: %s: read file error\n", "index");
+        exit(0);
+    }
     rec.base = (RecordPtr)p;
 
     fclose(fp);
