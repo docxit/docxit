@@ -17,7 +17,10 @@ int main(int argc, char *argv[]){
         strcat(inst, argv[1]);
         strcat(inst, ".docxit/");
         if(!inst[INSTRUCTION_MAX_LENGTH - 1]) {  // not overflow
-            system(inst);
+            if(system(inst) == -1){
+                printf("fatal: %s: cannot execute\n", inst);
+                exit(0);
+            }
             printf("Successfully deinit Docxit repository\n");
         }
         else printf("fatal error: %s: name too long\n", argv[1]);

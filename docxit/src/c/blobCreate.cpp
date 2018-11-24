@@ -14,7 +14,10 @@ void blobCreate(string filename, string value_sha1, const char *docxitrootpath)
   string command = "[  -f " + blobname + "  ]";
   command = command + " || " + mkdir;
   command = command + " && " + cp;
-  system(command.c_str());
+  if(system(command.c_str()) == -1){
+    cout<<"fatal: "<<command<<": cannot execute"<<endl;
+    exit(0);
+  }
 
 }
 void blobCreateMv(string filename, string value_sha1, const char *docxitrootpath)
@@ -30,7 +33,10 @@ void blobCreateMv(string filename, string value_sha1, const char *docxitrootpath
   string command = "[  -f " + blobname + "  ]";
   command = command + " || " + mkdir;
   command = command + " && " + cp;
-  system(command.c_str());
+  if(system(command.c_str()) == -1){
+    cout<<"fatal: "<<command<<": cannot execute"<<endl;
+    exit(0);
+  }
 
 }
 

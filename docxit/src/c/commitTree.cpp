@@ -49,7 +49,11 @@ void printCommitObject(const char *key, const char *path)
         exit(0);
     }
     CommitStruct *buf = (CommitStruct *)malloc(sizeof(CommitStruct));
-    fread(buf, sizeof(CommitStruct), 1, fp);
+    if(fread(buf, sizeof(CommitStruct), 1, fp) == 0){
+        printf("fatal: %s%s: read file error\n", "commit object ", key);
+        exit(0);
+    }
+
     printf("Author: \t%s\nData: \t%s\n\n%s\n",buf->author,buf->committime,buf->commitmessage);
     free(buf);
     fclose(fp);
