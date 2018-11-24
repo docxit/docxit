@@ -84,6 +84,32 @@ void writeRecordsToFile(const char *indexFileName, Records rec){
     fclose(fp);
 }
 
+int commitIndex(const char *indexFileName){
+// 0 clear, 1 have changed
+    Records rec = openIndex(indexFileName);
+
+    int i, ret = 0;
+    for(i = 0; i < rec.length; i ++){
+        if(rec.base[i].kind != unchanged){
+            ret = 1;
+            if(isRecordKind(&rec.base[i], changed)){
+                setRecordKey(&rec.base[i], getRecordNewkey(&rec.base[i]));
+            }
+            if(isRecordKind(&rec.base[i], removed)){
+                deleteDocxitRecordByPtr(&rec.base[i]);
+                continue;
+            }
+            setRecordNewkey(&rec.base[i], "");
+            setRecordKind(&rec.base[i], unchanged);
+        }
+    }
+
+    if(ret) writeRecordsToFile(indexFileName, rec);
+    freeRecords(&rec);
+
+    return ret;
+}
+
 #ifdef DEBUG
 void printRecords(Records rec){
     printf("legnth: %ld, size: %ld\n", rec.length, rec.recordSize);

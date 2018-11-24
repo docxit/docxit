@@ -26,7 +26,7 @@ deinit: $(SRC_DIR)$(C_DIR)deinit.c
 addIndex: $(SRC_DIR)$(C_DIR)addIndex.cpp $(BUILD_DIR)sha1.o $(BUILD_DIR)blobCreate.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)docxitPath.o
 	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@ -lpthread 
 
-commit: $(SRC_DIR)$(C_DIR)commit.cpp
+commit: $(SRC_DIR)$(C_DIR)commit.cpp $(BUILD_DIR)sha1.o $(BUILD_DIR)blobCreate.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)shellCommand.o
 	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@
 
 removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c $(BUILD_DIR)indexOp.o
@@ -47,6 +47,8 @@ $(BUILD_DIR)blobCreate.o: $(SRC_DIR)$(C_DIR)blobCreate.cpp
 $(BUILD_DIR)sha1.o: $(SRC_DIR)$(C_DIR)sha1.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
+$(BUILD_DIR)commitTree.o: $(SRC_DIR)$(C_DIR)commitTree.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
 
 .PHONY: clean rebuild install uninstall
 

@@ -44,5 +44,6 @@ int main(int argc, char *argv[])
         string sha1tf = valueSHA_1(fn);//commit object's key
         blobCreateMv(fn, sha1tf, argv[1]);
         insertCommitObjectToTree(sha1tf.c_str());
+        printCommitObject(sha1tf.c_str(), argv[1]);
     }
 }
