@@ -1,1 +1,10 @@
 build/
+*.o
+*.cbp
+*.layout
+.docxit/
+*.depend
+bin/
+debug/
+index
+obj/

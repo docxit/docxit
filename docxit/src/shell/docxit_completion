@@ -3,7 +3,8 @@
 
 _docxit_auto_complete()
 {
-	local docxit_opts="add commit diff help init log reset status tag"
+	local docxit_opts="add branch checkout commit config deinit diff help init log merge reset status tag version"
+	local docxit_other_opts="--help --version"
 
 	local cur prev files 
 	cur="${COMP_WORDS[COMP_CWORD]}"
@@ -12,7 +13,12 @@ _docxit_auto_complete()
 
 	if [[ ${prev} == "docxit" ]]
 	then
-		COMPREPLY=( $(compgen -W "${docxit_opts}" -- ${cur}) )
+		if [[ ${cur} == --* ]]
+		then
+			COMPREPLY=( $(compgen -W "${docxit_other_opts}" -- ${cur}) )
+		else
+			COMPREPLY=( $(compgen -W "${docxit_opts}" -- ${cur}) )
+		fi
 	else
 		COMPREPLY=( $(compgen -W "$files" -- ${cur}) )
 	fi
