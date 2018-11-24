@@ -5,17 +5,23 @@ BUILD_DIR=./build/
 SRC_DIR=./src/
 C_DIR=c/
 SHELL_DIR=shell/
+JAVA_DIR=java/
 BASH_COMP_DIR=/etc/bash_completion.d/
 EXE_DIR=/usr/local/lib/docxit/
 MY_PATH=/usr/local/bin/
 
 ifeq ($(mode), debug)
-all: build docxit init deinit addIndex removeIndex commit printIndex
+all: all_release all_debug 
 CFLAGS=-Wall -g -DDEBUG
 else
-all: build docxit init deinit addIndex removeIndex commit
+all: all_release 
 CFLAGS=-Wall -O3
 endif
+
+
+all_release: build docxit init deinit addIndex removeIndex commit diff.jar merge.jar
+
+all_debug: printIndex
 
 build:
 	mkdir -p $(BUILD_DIR)
@@ -40,6 +46,32 @@ removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c $(BUILD_DIR)indexOp.o
 
 printIndex: $(SRC_DIR)$(C_DIR)printIndex.cpp $(BUILD_DIR)indexOp.o $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellCommand.o
 	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@
+
+diff.jar: $(BUILD_DIR)diffdir
+	jar cvfm $(BUILD_DIR)diff.jar $^/META-INF/MANIFEST.MF -C $^ .
+
+merge.jar: $(BUILD_DIR)mergedir
+	jar cvfm $(BUILD_DIR)merge.jar $^/META-INF/MANIFEST.MF -C $^ .
+
+$(BUILD_DIR)diffdir: compilediff
+	mkdir -p $(BUILD_DIR)diffdir/META-INF
+	cp $(SRC_DIR)$(JAVA_DIR)docx4j.properties $(BUILD_DIR)diffdir
+	cp $(SRC_DIR)$(JAVA_DIR)log4j.properties $(BUILD_DIR)diffdir
+	cp $(SRC_DIR)$(JAVA_DIR)MANIFEST.MF $(BUILD_DIR)diffdir/META-INF/MANIFEST.MF
+	
+$(BUILD_DIR)mergedir: compilemerge
+	mkdir -p $(BUILD_DIR)mergedir/META-INF
+	cp $(SRC_DIR)$(JAVA_DIR)docx4j.properties $(BUILD_DIR)mergedir
+	cp $(SRC_DIR)$(JAVA_DIR)log4j.properties $(BUILD_DIR)mergedir
+	cp $(SRC_DIR)$(JAVA_DIR)MANIFEST.MF $(BUILD_DIR)mergedir/META-INF/MANIFEST.MF
+	
+compilediff: $(SRC_DIR)$(JAVA_DIR)diff_match_patch.java $(SRC_DIR)$(JAVA_DIR)Vo.java $(SRC_DIR)$(JAVA_DIR)WordCompareUtil.java
+	mkdir -p $(BUILD_DIR)diffdir/docxit
+	javac -Djava.ext.dirs=./lib/ $^ -d $(BUILD_DIR)diffdir/
+
+compilemerge: $(SRC_DIR)$(JAVA_DIR)WordMergeUtil.java
+	mkdir -p $(BUILD_DIR)mergedir/docxit
+	javac -Djava.ext.dirs=./lib/ $^ -d $(BUILD_DIR)mergedir/
 
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@ 
@@ -85,6 +117,10 @@ install_release:
 	cp $(BUILD_DIR)addIndex $(EXE_DIR)addIndex
 	cp $(BUILD_DIR)removeIndex $(EXE_DIR)removeIndex
 	cp $(BUILD_DIR)commit $(EXE_DIR)commit
+	cp $(BUILD_DIR)diff.jar $(EXE_DIR)diff.jar
+	cp $(BUILD_DIR)merge.jar $(EXE_DIR)merge.jar
+	cp -r lib $(EXE_DIR)externallib 
+
 
 install_debug:
 	cp $(BUILD_DIR)printIndex $(MY_PATH)
