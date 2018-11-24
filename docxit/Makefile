@@ -1,6 +1,6 @@
 CC=gcc
 CXX=g++
-CFLAGS=-Wall
+CFLAGS=-Wall -g
 BUILD_DIR=./build/
 SRC_DIR=./src/
 C_DIR=c/
@@ -9,7 +9,7 @@ BASH_COMP_DIR=/etc/bash_completion.d/
 EXE_DIR=/usr/local/lib/docxit/
 MY_PATH=/usr/local/bin/
 
-all: build docxit init deinit addIndex removeIndex
+all: build docxit init deinit addIndex removeIndex commit
 
 build:
 	mkdir -p $(BUILD_DIR)
@@ -25,6 +25,9 @@ deinit: $(SRC_DIR)$(C_DIR)deinit.c
 
 addIndex: $(SRC_DIR)$(C_DIR)addIndex.cpp $(BUILD_DIR)sha1.o $(BUILD_DIR)blobCreate.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)docxitPath.o
 	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@ -lpthread 
+
+commit: $(SRC_DIR)$(C_DIR)commit.cpp $(BUILD_DIR)sha1.o $(BUILD_DIR)blobCreate.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)shellCommand.o
+	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@
 
 removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c $(BUILD_DIR)indexOp.o
 	$(CC) $(CFLAGS) $^ -o $(BUILD_DIR)$@ -lpthread
@@ -44,6 +47,8 @@ $(BUILD_DIR)blobCreate.o: $(SRC_DIR)$(C_DIR)blobCreate.cpp
 $(BUILD_DIR)sha1.o: $(SRC_DIR)$(C_DIR)sha1.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
+$(BUILD_DIR)commitTree.o: $(SRC_DIR)$(C_DIR)commitTree.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
 
 .PHONY: clean rebuild install uninstall
 
@@ -64,6 +69,7 @@ install:
 	cp $(BUILD_DIR)deinit $(EXE_DIR)deinit
 	cp $(BUILD_DIR)addIndex $(EXE_DIR)addIndex
 	cp $(BUILD_DIR)removeIndex $(EXE_DIR)removeIndex
+	cp $(BUILD_DIR)commit $(EXE_DIR)commit
 
 uninstall:
 	-rm -f $(BASH_COMP_DIR)docxit_completion
