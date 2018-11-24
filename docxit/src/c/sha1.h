@@ -1,6 +1,7 @@
 #ifndef __SHA1_H__
 #define __SHA1_H__
 
+
 #include<iostream>
 #include<string>
 #include<stdlib.h>
@@ -10,5 +11,8 @@
 using namespace std;
 
 string valueSHA_1(string filename);
+// filename should be full path
+
+
 
 #endif

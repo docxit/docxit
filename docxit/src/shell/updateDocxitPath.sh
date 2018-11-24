@@ -1,11 +1,14 @@
 #!/bin/bash
 
-allrepo=$(cat ~/.docxitPath)
+if [ -f ~/.docxitPath ]
+then
+	allrepo=$(cat ~/.docxitPath)
 
-for i in $allrepo
-do
-	[ -d $i'.docxit' ] && echo $i >> ~/.tempfile
-done
+	touch ~/.tempfile
+	for i in $allrepo
+	do
+		[ -d $i'.docxit' ] && echo $i >> ~/.tempfile
+	done
 
-rm -f ~/.docxitPath
-mv ~/.tempfile ~/.docxitPath
+	mv ~/.tempfile ~/.docxitPath
+fi
