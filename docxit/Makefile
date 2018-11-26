@@ -10,7 +10,7 @@ EXE_DIR=/usr/local/lib/docxit/
 MY_PATH=/usr/local/bin/
 
 ifeq ($(mode), debug)
-all: build docxit init deinit addIndex removeIndex commit printIndex
+all: build docxit init deinit addIndex removeIndex commit printIndex printConfig
 CFLAGS=-Wall -g -DDEBUG
 else
 all: build docxit init deinit addIndex removeIndex commit
@@ -41,6 +41,9 @@ removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c $(BUILD_DIR)indexOp.o
 printIndex: $(SRC_DIR)$(C_DIR)printIndex.cpp $(BUILD_DIR)indexOp.o $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellCommand.o
 	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@
 
+printConfig: $(SRC_DIR)$(C_DIR)printConfig.cpp $(BUILD_DIR)configOp.o $(BUILD_DIR)shellCommand.o
+	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@
+
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@ 
 
@@ -57,6 +60,9 @@ $(BUILD_DIR)sha1.o: $(SRC_DIR)$(C_DIR)sha1.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
 $(BUILD_DIR)commitTree.o: $(SRC_DIR)$(C_DIR)commitTree.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
+
+$(BUILD_DIR)configOp.o: $(SRC_DIR)$(C_DIR)configOp.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
 .PHONY: clean rebuild install install_debug install_release uninstall
@@ -88,9 +94,10 @@ install_release:
 
 install_debug:
 	cp $(BUILD_DIR)printIndex $(MY_PATH)
+	cp $(BUILD_DIR)printConfig $(MY_PATH)
 
 uninstall:
 	-rm -f $(BASH_COMP_DIR)docxit_completion
 	sed -i '/# docxit auto complete/d' ~/.bashrc
-	-rm -f $(MY_PATH)docxit $(MY_PATH)printIndex
+	-rm -f $(MY_PATH)docxit $(MY_PATH)printIndex printConfig
 	-rm -rf $(EXE_DIR)

@@ -35,6 +35,10 @@ void addRemote(const char *remotename, const char *ip, const char *configpath);
 
 string getIPbyUserName(const char *username, const char *configpath);//if can't find return string with "error"
 
+void removeRemoteByUserName(const char *username, const char *configpath);
+
+void clearConfig(const char * configpath);
+
 #ifdef DEBUG
 
 void printConfig(const char *configpath);
