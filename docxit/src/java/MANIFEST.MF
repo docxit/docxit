@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Class-Path: . externallib/docx4j-6.0.1.jar externallib/jaxb-svg11-1.
+ 0.2.jar externallib/mbassador-1.2.4.2.jar externallib/slf4j-api-1.7
+ .25.jar externallib/jcl-over-slf4j-1.7.25.jar externallib/slf4j-log
+ 4j12-1.7.25.jar externallib/log4j-1.2.17.jar externallib/commons-la
+ ng3-3.5.jar externallib/commons-compress-1.12.jar externallib/commo
+ ns-codec-1.11.jar externallib/commons-io-2.5.jar externallib/httpcl
+ ient-4.5.6.jar externallib/httpcore-4.4.10.jar externallib/jackson-
+ core-2.7.9.jar externallib/jackson-databind-2.7.9.4.jar externallib
+ /jackson-annotations-2.7.0.jar externallib/xmlgraphics-commons-2.3.j
+ ar externallib/avalon-framework-api-4.3.1.jar externallib/avalon-fr
+ amework-impl-4.3.1.jar externallib/xalan-2.7.2.jar externallib/seri
+ alizer-2.7.2.jar externallib/wmf2svg-0.9.8.jar externallib/antlr-ru
+ ntime-3.5.2.jar externallib/stringtemplate-3.2.1.jar externallib/an
+ tlr-2.7.7.jar externallib/guava-20.0.jar externallib/lorem-2.1.jar
+Main-Class: docxit.WordCompareUtil
+
