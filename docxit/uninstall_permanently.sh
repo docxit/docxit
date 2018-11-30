@@ -14,4 +14,4 @@ do
 	rm -rf "$i"".docxit"
 done
 
-rm -rf ~/.docxitPath
+rm -rf ~/.docxitPath ~/.docxitconfig
