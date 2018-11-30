@@ -13,5 +13,5 @@ Class-Path: . externallib/docx4j-6.0.1.jar externallib/jaxb-svg11-1.
  alizer-2.7.2.jar externallib/wmf2svg-0.9.8.jar externallib/antlr-ru
  ntime-3.5.2.jar externallib/stringtemplate-3.2.1.jar externallib/an
  tlr-2.7.7.jar externallib/guava-20.0.jar externallib/lorem-2.1.jar
-Main-Class: docxit.WordCompareUtil
+Main-Class: docxit.Main
 

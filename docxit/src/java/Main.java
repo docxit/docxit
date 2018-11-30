@@ -3,8 +3,8 @@ import java.lang.reflect.*;
 
 public class Main {
 
-	public static int main(String[] args) {
-		String[] suffix = args[1].split(".",2);
+	public static void main(String[] args) {
+		String[] suffix = args[1].split("\\.",2);
 		String className = suffix[1] + "Operation";
 		Class<?> op = null;
 		try {
@@ -13,28 +13,33 @@ public class Main {
 			try {
 				op = Class.forName("docxit."+"defaultOperation");
 			} catch (ClassNotFoundException e1) {
-				return 1;
+				e1.printStackTrace();
 			}
 		}
 		Method method = null;
 		try {
-			method = op.getMethod(args[0]);
+			if(args[0].equals("diff")) {
+				method = op.getMethod(args[0], String.class, String.class);
+				method.invoke(op.newInstance(), args[1], args[2]);
+			}
+			else if (args[0].equals("merge")) {
+				method = op.getMethod(args[0], String.class, String.class, String.class, String.class, String.class);
+				method.invoke(op.newInstance(), args[1], args[2], args[3], args[4], args[5]);
+			} else {
+				System.out.println("None method found!");
+			}
 		} catch (NoSuchMethodException e1) {
-			return 1;
+			e1.printStackTrace();
 		} catch (SecurityException e1) {
-			return 1;
-		}
-		try {
-			method.invoke(op.newInstance());
+			e1.printStackTrace();
 		} catch (IllegalAccessException e) {
-			return 1;
+			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			return 1;
+			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			return 1;
+			e.printStackTrace();
 		} catch (InstantiationException e) {
-			return 1;
+			e.printStackTrace();
 		}
-		return 0;
 	}
 }

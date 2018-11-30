@@ -16,6 +16,7 @@ public class docxOperation implements FileOperation{
 		try {
 			cp.diff(oldFilePath, newFilePath, resultFilePath);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return 1;
 		}
 		return 0;
@@ -26,10 +27,13 @@ public class docxOperation implements FileOperation{
 		try {
 			M.merge(Branchname0, Branchname1, oldFilePath, newFilePath, resultFilePath);
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 			return 1;
 		} catch (Docx4JException e) {
+			e.printStackTrace();
 			return 2;
 		} catch (JAXBException e) {
+			e.printStackTrace();
 			return 3;
 		}
 		return 0;
