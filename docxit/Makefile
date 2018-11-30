@@ -117,7 +117,7 @@ $(LIB_DIR)xalan-2.7.2.jar:
 $(LIB_DIR)xmlgraphics-commons-2.3.jar:
 	wget -O $@ -c $(EXT_HTTP)xmlgraphics-commons-2.3.jar || wget -O $@ -c $(AD_EXT_HTTP)xmlgraphics-commons-2.3.jar
 
-$(BUILD_DIR)docxit: $(SRC_DIR)$(C_DIR)docxit.cpp $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellCommand.o
+$(BUILD_DIR)docxit: $(SRC_DIR)$(C_DIR)docxit.cpp $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)configOp.o 
 	$(CXX) $(CFLAGS) $^ -o $@ 
 
 $(BUILD_DIR)init: $(SRC_DIR)$(C_DIR)init.c

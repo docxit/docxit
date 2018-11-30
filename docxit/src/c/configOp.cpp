@@ -1,5 +1,16 @@
 #include"configOp.h"
 
+const char *configpath()
+{
+    string command = "echo -n \"\" >> ~/.docxitconfig; echo ~/";
+    string root = shellCommand(command);
+    root = root.substr(0,root.length()-1);
+    static char conpath[MAX_CONFIG_PATH_LENGTH];
+    strcpy(conpath, root.c_str());
+    strcat(conpath, CONFIGFILENAME);
+    return conpath;
+}
+
 void changeUserName(const char *username, const char *configpath)
 {
     ifstream ifh(configpath,ios::binary);
@@ -138,8 +149,6 @@ void clearConfig(const char * configpath)
     cout << "file config is cleared!" << endl;
 }
 
-#ifdef DEBUG
-
 void printConfig(const char *configpath)
 {
     ifstream ifh(configpath,ios::binary);
@@ -153,13 +162,11 @@ void printConfig(const char *configpath)
     ifh.close();
     int rn = cs->remotenum;
     cout << cs->username << endl;
-    cout << rn << endl;
+//    cout << rn << endl;
     for(int i = 0; i < rn; i++)
     {
-        cout << cs->remoteinfo[i].remotename << "    " << cs->remoteinfo[i].remoteip << endl;
+        cout << std::left << setw(24)<< cs->remoteinfo[i].remotename << cs->remoteinfo[i].remoteip << endl;
     }
     free(cs);
 }
-
-#endif // DEBUG
 

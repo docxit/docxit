@@ -1,18 +1,20 @@
 #ifndef __CONFIGOP_H__
 #define __CONFIGOP_H__
 #include<iostream>
+#include<iomanip>
 #include<istream>
 #include<ostream>
 #include<fstream>
 #include<string.h>
 #include<string>
+#include"shellCommand.h"
 
 #define MAX_CONFIG_PATH_LENGTH 50
 #define MAX_ROMOTE_NUM 10
 #define MAX_USERNAME_LENGTH 128
 #define MAX_REMOTENAME_LENGTH 128
 #define MAX_IP_LENGTH 32
-#define CONFIGFILENAME "config"
+#define CONFIGFILENAME ".docxitconfig"
 
 using namespace std;
 
@@ -29,6 +31,8 @@ typedef struct
     int remotenum = 0;
 }ConfigStruct;
 
+const char *configpath();
+
 void changeUserName(const char *username, const char *configpath);
 
 string getUserName(const char *configpath);
@@ -41,11 +45,8 @@ void removeRemoteByUserName(const char *username, const char *configpath);
 
 void clearConfig(const char * configpath);
 
-#ifdef DEBUG
-
 void printConfig(const char *configpath);
 
-#endif // DEBUG
 //~/.docxitconfig
 
 #endif // __CONFIG_H__
