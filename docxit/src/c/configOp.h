@@ -7,10 +7,12 @@
 #include<string.h>
 #include<string>
 
+#define MAX_CONFIG_PATH_LENGTH 50
 #define MAX_ROMOTE_NUM 10
 #define MAX_USERNAME_LENGTH 128
 #define MAX_REMOTENAME_LENGTH 128
 #define MAX_IP_LENGTH 32
+#define CONFIGFILENAME "config"
 
 using namespace std;
 

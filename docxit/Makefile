@@ -10,7 +10,7 @@ EXE_DIR=/usr/local/lib/docxit/
 MY_PATH=/usr/local/bin/
 
 ifeq ($(mode), debug)
-all: build docxit init deinit addIndex removeIndex commit printIndex printConfig
+all: build docxit init deinit addIndex removeIndex commit printIndex printConfig config
 CFLAGS=-Wall -g -DDEBUG
 else
 all: build docxit init deinit addIndex removeIndex commit
@@ -44,6 +44,9 @@ printIndex: $(SRC_DIR)$(C_DIR)printIndex.cpp $(BUILD_DIR)indexOp.o $(BUILD_DIR)d
 printConfig: $(SRC_DIR)$(C_DIR)printConfig.cpp $(BUILD_DIR)configOp.o $(BUILD_DIR)shellCommand.o
 	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@
 
+config: $(SRC_DIR)$(C_DIR)config.cpp $(BUILD_DIR)configOp.o $(BUILD_DIR)shellCommand.o
+	$(CXX) $(CFLAGS) $^ -o $(BUILD_DIR)$@
+	
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@ 
 
@@ -91,6 +94,7 @@ install_release:
 	cp $(BUILD_DIR)addIndex $(EXE_DIR)addIndex
 	cp $(BUILD_DIR)removeIndex $(EXE_DIR)removeIndex
 	cp $(BUILD_DIR)commit $(EXE_DIR)commit
+	cp $(BUILD_DIR)config $(EXE_DIR)config
 
 install_debug:
 	cp $(BUILD_DIR)printIndex $(MY_PATH)
