@@ -53,9 +53,10 @@ public class WordCompareUtil {
 
     private static BigInteger commentId = BigInteger.valueOf(1);
 
-    public static void main(String[] args) throws Exception {
-        WordCompareUtil cp = new WordCompareUtil();
-        cp.compare(new File(args[0]), new File(args[1]), args[2]);
+    public int diff(String oldF, String newF, String resultF) throws Exception {
+        boolean diff1 = compare(new File(oldF), new File(newF), resultF);
+        if(diff1) return 0;
+        else return 1;
     }
 
     public static Boolean compare(File source,File target,String out) throws Exception{

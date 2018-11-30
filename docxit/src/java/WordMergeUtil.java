@@ -1,4 +1,4 @@
-package myArtifact;
+package docxit;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,15 +51,6 @@ import org.docx4j.wml.Body;
 import org.docx4j.wml.Document;
 
 public class WordMergeUtil {
-
-	public static void main(String[] args) throws Exception {
-		
-		WordMergeUtil M = new WordMergeUtil();
-//		M.merge("banch0", "branch1", "/home/pwtm/文档/demo1.docx", "/home/pwtm/文档/demo2.docx", 
-//					"/home/pwtm/文档/result.docx");
-		M.merge(args[0], args[1], args[2], args[3], args[4]);
-		
-	}	
 	
 	public void merge(String branch0, String branch1, String path0, String path1, String outpath) throws FileNotFoundException, Docx4JException, JAXBException {
 		WordprocessingMLPackage wordMLPackage0 = WordprocessingMLPackage.load(new FileInputStream(new File(path0)));

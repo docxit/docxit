@@ -3,10 +3,20 @@
 #include <string.h>
 #include <unistd.h>
 #include "docxitPath.h"
+#include "configOp.h"
 
 #define EXE_DIR "/usr/local/lib/docxit/"
 
+static void checkName(){
+    string username = getUserName(configpath());
+    if(username == ""){
+        printf("Please use `docxit config --myname <user_name>` to set your name first\n");
+        exit(0);
+    }
+}
+
 static void checkDocxitPath(char *argv[]){
+    checkName();
 	if(system(EXE_DIR"updateDocxitPath.sh") == -1){
         printf("fatal: %s: cannot execute file\n", "updateDocxitPath.sh");
         exit(0);
@@ -42,6 +52,7 @@ commands:\n\
     init        docxit init                                 init docxit repository at current directory\n\
     reset       docxit reset ???                            ???\n\
     version     docxit version                              show docxit version info\n\
+\n\
 \
 ";
 #else
@@ -68,6 +79,7 @@ commands:\n\
 \n\
 debug_commands:\n\
     printIndex          print the index file in a docxit repository\n\
+\n\
 \
 ";
 #endif
@@ -147,7 +159,12 @@ debug_commands:\n\
                             }
                         case 'n':
                            if(!strcmp(cur, "fig")){
-                                checkDocxitPath(argv);
+                                if(system(EXE_DIR"updateDocxitPath.sh") == -1){
+                                    printf("fatal: %s: cannot execute file\n", "updateDocxitPath.sh");
+                                    exit(0);
+                                }
+                                docxitPath();
+                                argv[1] = (char *)DOCXIT_PATH.c_str();
                                 if(execv(EXE_DIR"config", argv) == -1){
                                     perror(EXE_DIR"config");
                                     exit(0);
