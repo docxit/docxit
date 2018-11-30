@@ -24,9 +24,9 @@ CFLAGS=-Wall -O3
 endif
 
 
-all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar 
+all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config
 
-all_debug: $(BUILD_DIR)printIndex
+all_debug: $(BUILD_DIR)printIndex $(BUILD_DIR)printConfig
 
 build:
 	mkdir -p $(BUILD_DIR)
@@ -149,6 +149,12 @@ $(BUILD_DIR)java: $(SRC_DIR)$(JAVA_DIR)*.java
 	cp $(SRC_DIR)$(JAVA_DIR)log4j.properties $@
 	cp $(SRC_DIR)$(JAVA_DIR)MANIFEST.MF $@/META-INF/MANIFEST.MF
 
+$(BUILD_DIR)printConfig: $(SRC_DIR)$(C_DIR)printConfig.cpp $(BUILD_DIR)configOp.o $(BUILD_DIR)shellCommand.o
+	$(CXX) $(CFLAGS) $^ -o $@
+
+$(BUILD_DIR)config: $(SRC_DIR)$(C_DIR)config.cpp $(BUILD_DIR)configOp.o $(BUILD_DIR)shellCommand.o
+	$(CXX) $(CFLAGS) $^ -o $@
+	
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@ 
 
@@ -165,6 +171,9 @@ $(BUILD_DIR)sha1.o: $(SRC_DIR)$(C_DIR)sha1.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
 $(BUILD_DIR)commitTree.o: $(SRC_DIR)$(C_DIR)commitTree.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
+
+$(BUILD_DIR)configOp.o: $(SRC_DIR)$(C_DIR)configOp.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
 .PHONY: clean rebuild install install_debug install_release uninstall
@@ -194,15 +203,16 @@ install_release:
 	cp $(BUILD_DIR)addIndex $(EXE_DIR)addIndex
 	cp $(BUILD_DIR)removeIndex $(EXE_DIR)removeIndex
 	cp $(BUILD_DIR)commit $(EXE_DIR)commit
+	cp $(BUILD_DIR)config $(EXE_DIR)config
 	cp $(BUILD_DIR)fileop.jar $(EXE_DIR)fileop.jar
 	cp -r $(LIB_DIR) $(EXE_DIR)externallib 
 
-
 install_debug:
 	cp $(BUILD_DIR)printIndex $(MY_PATH)
+	cp $(BUILD_DIR)printConfig $(MY_PATH)
 
 uninstall:
 	-rm -f $(BASH_COMP_DIR)docxit_completion
 	sed -i '/# docxit auto complete/d' ~/.bashrc
-	-rm -f $(MY_PATH)docxit $(MY_PATH)printIndex
+	-rm -f $(MY_PATH)docxit $(MY_PATH)printIndex $(MY_PATH)printConfig
 	-rm -rf $(EXE_DIR)
