@@ -24,7 +24,7 @@ CFLAGS=-Wall -O3
 endif
 
 
-all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config $(BUILD_DIR)log
+all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config $(BUILD_DIR)log $(BUILD_DIR)branch $(BUILD_DIR)checkout
 
 all_debug: $(BUILD_DIR)printIndex $(BUILD_DIR)printConfig
 
@@ -158,6 +158,12 @@ $(BUILD_DIR)config: $(SRC_DIR)$(C_DIR)config.cpp $(BUILD_DIR)configOp.o $(BUILD_
 $(BUILD_DIR)log: $(SRC_DIR)$(C_DIR)log.cpp $(BUILD_DIR)commitTree.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)configOp.o
 	$(CXX) $(CFLAGS) $^ -o $@
 	
+$(BUILD_DIR)branch: $(SRC_DIR)$(C_DIR)branch.cpp $(BUILD_DIR)shellCommand.o 
+	$(CXX) $(CFLAGS) $^ -o $@
+	
+$(BUILD_DIR)checkout: $(SRC_DIR)$(C_DIR)checkout.cpp $(BUILD_DIR)shellCommand.o 
+	$(CXX) $(CFLAGS) $^ -o $@
+	
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@ 
 
@@ -208,6 +214,8 @@ install_release:
 	cp $(BUILD_DIR)commit $(EXE_DIR)commit
 	cp $(BUILD_DIR)config $(EXE_DIR)config
 	cp $(BUILD_DIR)log $(EXE_DIR)log
+	cp $(BUILD_DIR)branch $(EXE_DIR)branch
+	cp $(BUILD_DIR)checkout $(EXE_DIR)checkout
 	cp $(BUILD_DIR)fileop.jar $(EXE_DIR)fileop.jar
 	cp -r $(LIB_DIR) $(EXE_DIR)externallib 
 

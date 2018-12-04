@@ -143,8 +143,8 @@ void printCommitObject(const char *key, const char *path)
 }
 
 void printCommitTree(const char *key, const char *path){
-/// todo: print(HEAD -> master)
-    printf("commit %s\n", key);
+/// todo: print(HEAD -> master),\t to space
+    printf("commit \t%s\n", key);
     string keyvalue = key;
     string dir = path;
     dir = dir + ".docxit/object/" + keyvalue.substr(0,2) + '/' + keyvalue.substr(2,38);
