@@ -32,7 +32,7 @@ void writeCommitStructToFile(const CommitStruct *cf, const char *filename);
 
 void freeCommitStruct(CommitStruct **cs);
 
-void insertCommitObjectToTree(const char *key);
+void insertCommitObjectToTree(const char *key, const char *path);
 //open file current branch(save in file HEAD), pass the key to parent_key, open parent_key file and write key into it, open key file and write parent_key into it,
 //change the key in current branch into key
 //if root is null, change root into key, change the branch in HEAD into key

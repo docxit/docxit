@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
         string fn = ".docxit_commit_tempfile";
         string sha1tf = valueSHA_1(fn);//commit object's key
         blobCreateMv(fn, sha1tf, argv[1]);
-        insertCommitObjectToTree(sha1tf.c_str());
+        insertCommitObjectToTree(sha1tf.c_str(), argv[1]);
         printCommitObject(sha1tf.c_str(), argv[1]);
     }
 }
