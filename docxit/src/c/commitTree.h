@@ -6,6 +6,7 @@
 #include<string>
 #include"shellCommand.h"
 #include "configOp.h"
+#include <vector>
 
 using namespace std;
 
@@ -42,6 +43,6 @@ void printTree();
 //open root dfs, post order travel, print tree
 void printCommitObject(const char *key, const char *path);
 
-void printCommitTree(const char *key, const char *path);
+void printCommitTree(const char *key, const char *path, const char *currentBranch);
 
 #endif // COMMITTREE_H

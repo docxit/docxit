@@ -29,6 +29,11 @@ static void checkDocxitPath(char *argv[]){
     argv[1] = (char *)DOCXIT_PATH.c_str();
 }
 
+/// file name contains ' ' can't add !!!
+/// todo: checkout should change work space. reset
+/// todo: two branch commit same version
+/// todo: enough test
+/// tag
 int main(int argc, char *argv[])
 {
     //TODO: alias

@@ -137,14 +137,49 @@ void printCommitObject(const char *key, const char *path)
         exit(0);
     }
 
-    printf("Author:\t%s\nData:  \t%s\n\t%s\n\n",buf->author,buf->committime,buf->commitmessage);
+    printf("Author: %s\nData:   %s\n        %s\n\n",buf->author,buf->committime,buf->commitmessage);
     free(buf);
     fclose(fp);
 }
 
-void printCommitTree(const char *key, const char *path){
-/// todo: print(HEAD -> master)
-    printf("commit %s\n", key);
+
+static std::vector<std::string> split(const std::string &str, const std::string &delim)
+{
+    std::vector<std::string> spiltCollection;
+    if(str.size()==0)
+        return spiltCollection;
+    int start = 0;
+    int idx = str.find(delim, start);
+    while( idx != (int)std::string::npos )
+    {
+        spiltCollection.push_back(str.substr(start, idx-start));
+        start = idx+delim.size();
+        idx = str.find(delim, start);
+    }
+    spiltCollection.push_back(str.substr(start));
+    return spiltCollection;
+}
+
+
+void printCommitTree(const char *key, const char *path, const char *currentBranch){
+/// todo: print head->master
+
+    printf("commit  %s  ", key);
+
+    // is key a branch
+    string grepstr = "cd ";
+    grepstr = grepstr + path + ".docxit/refs/heads/ ;grep '" + key + "' *";
+    grepstr = shellCommand(grepstr);
+    auto alls = split(grepstr, "\n");
+    for (const auto &allbr: alls) {
+        int len = allbr.find(':');
+        if(len == -1) continue;
+        string s = allbr.substr(0, len);
+        if(s != currentBranch)printf(" (%s) ", s.c_str());
+        else printf(" (HEAD -> %s) ", s.c_str());
+    }
+    printf("\n");
+
     string keyvalue = key;
     string dir = path;
     dir = dir + ".docxit/object/" + keyvalue.substr(0,2) + '/' + keyvalue.substr(2,38);
@@ -159,7 +194,7 @@ void printCommitTree(const char *key, const char *path){
         exit(0);
     }
 
-    printf("Author:\t%s\nData:  \t%s\n\t%s\n\n",buf->author,buf->committime,buf->commitmessage);
+    printf("Author: %s\nData:   %s\n        %s\n\n",buf->author,buf->committime,buf->commitmessage);
 
     // copy parent attribute
     int pn = buf->parentnum;
@@ -170,5 +205,5 @@ void printCommitTree(const char *key, const char *path){
     free(buf);
     fclose(fp);
 
-    while(pn) printCommitTree(pkey[-- pn], path);
+    while(pn) printCommitTree(pkey[-- pn], path, currentBranch);
 }
