@@ -6,6 +6,7 @@
 #include<string>
 #include"shellCommand.h"
 #include "configOp.h"
+#include <vector>
 
 using namespace std;
 
