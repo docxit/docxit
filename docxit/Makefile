@@ -205,6 +205,9 @@ install_release:
 	cp $(SRC_DIR)$(SHELL_DIR)updateDocxitPath.sh $(EXE_DIR)
 	cp $(SRC_DIR)$(SHELL_DIR)listAllFiles.sh $(EXE_DIR)add
 	cp $(SRC_DIR)$(SHELL_DIR)diff.sh $(EXE_DIR)diff
+	cp $(SRC_DIR)$(SHELL_DIR)deleteTag.sh $(EXE_DIR)deleteTag
+	cp $(SRC_DIR)$(SHELL_DIR)createTag.sh $(EXE_DIR)createTag
+	cp $(SRC_DIR)$(SHELL_DIR)showTag.sh $(EXE_DIR)showTag
 	echo "source $(BASH_COMP_DIR)docxit_completion  # docxit auto complete" >> ~/.bashrc
 	cp $(BUILD_DIR)docxit $(MY_PATH)
 	cp $(BUILD_DIR)init $(EXE_DIR)init
