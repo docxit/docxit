@@ -161,10 +161,10 @@ static std::vector<std::string> split(const std::string &str, const std::string 
 }
 
 
-void printCommitTree(const char *key, const char *path){
+void printCommitTree(const char *key, const char *path, const char *currentBranch){
 /// todo: print head->master
-/// if current branch is
-    printf("commit  %s ", key);
+
+    printf("commit  %s  ", key);
 
     // is key a branch
     string grepstr = "cd ";
@@ -174,7 +174,9 @@ void printCommitTree(const char *key, const char *path){
     for (const auto &allbr: alls) {
         int len = allbr.find(':');
         if(len == -1) continue;
-        printf(" %s", allbr.substr(0, len).c_str());
+        string s = allbr.substr(0, len);
+        if(s != currentBranch)printf(" (%s) ", s.c_str());
+        else printf(" (HEAD -> %s) ", s.c_str());
     }
     printf("\n");
 
@@ -203,5 +205,5 @@ void printCommitTree(const char *key, const char *path){
     free(buf);
     fclose(fp);
 
-    while(pn) printCommitTree(pkey[-- pn], path);
+    while(pn) printCommitTree(pkey[-- pn], path, currentBranch);
 }

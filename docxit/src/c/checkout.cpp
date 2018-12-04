@@ -34,9 +34,15 @@ int main(int argc, char *argv[])
         /// here should check branch name without ' ' '/' and so on
         if(!strcmp(argv[2], "-b")){
             if(*argv[3] == '-') printHelp();
+
+            // get current branch
+            string curbr = "cat ";
+            curbr = curbr + argv[1] + ".docxit/HEAD";
+            curbr = shellCommand(curbr);
+
             string path = argv[1];
             path = path + ".docxit/refs/heads/" + argv[3];
-            string cbi = "if [ -f " + path + " ]; then echo \"error: branch '" + argv[3] + "' exists\"\nelse\n\techo -n 'null'>" + path + "\necho 'create and switch to new branch " + argv[3] + "'\necho -n '" + path + "'>" + argv[1] + ".docxit/HEAD\nfi";
+            string cbi = "if [ -f " + path + " ]; then echo \"error: branch '" + argv[3] + "' exists\"\nelse\n\tcp " + curbr + " " + path + "\necho 'create and switch to new branch " + argv[3] + "'\necho -n '" + path + "'>" + argv[1] + ".docxit/HEAD\nfi";
             if(system(cbi.c_str()) == -1){
                 printf("fatal: create and switch to new branch failed\n");
             }
