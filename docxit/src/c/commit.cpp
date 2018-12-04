@@ -22,10 +22,10 @@ int main(int argc, char *argv[])
     string docxitroot = argv[1];
     string head = docxitroot + ".docxit/HEAD";
     ifh.open(head.c_str());
-    char ptrname[10];
-    ifh.getline(ptrname,10);
+    char ptrname[128];
+    ifh.getline(ptrname,128);
     string ptr = ptrname;
-    cout << "current branch is " << ptr << endl;
+    cout << "current branch is " << ptr.substr(ptr.rfind('/') + 1) << endl;
     string indexpath = docxitroot + ".docxit/" + INDEX_FILE_NAME;
     int change = commitIndex(indexpath.c_str());
     if(change == 0)
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
         string fn = ".docxit_commit_tempfile";
         string sha1tf = valueSHA_1(fn);//commit object's key
         blobCreateMv(fn, sha1tf, argv[1]);
-        insertCommitObjectToTree(sha1tf.c_str());
+        insertCommitObjectToTree(sha1tf.c_str(), argv[1]);
         printCommitObject(sha1tf.c_str(), argv[1]);
     }
 }
