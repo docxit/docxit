@@ -14,6 +14,7 @@ CommitStruct *createCommitStruct(const char *key, const char *message)
     strcpy(cs->key, key);
     cs->parentnum = 0;
     cs->childnum = 0;
+    strcpy(cs->author, getUserName(configpath()).c_str());
     strcpy(cs->commitmessage, message);
     return cs;
 }
@@ -41,7 +42,7 @@ void insertCommitObjectToTree(const char *key, const char *path)
 /// HEAD should contains full path of branch-file without '\n'.
 
     // get parent key
-    string inst = "cat`cat ";
+    string inst = "cat `cat ";
     inst = inst + path + ".docxit/HEAD`";
     string parentkey = shellCommand(inst);
     string curkey = key;
@@ -93,7 +94,7 @@ void insertCommitObjectToTree(const char *key, const char *path)
             printf("fatal: there are already two parents for current commit node\n");
             exit(0);
         }
-        strcpy(cbuf->parentkey[(int)(pbuf->parentnum ++)], parentkey.c_str());
+        strcpy(cbuf->parentkey[(int)(cbuf->parentnum ++)], parentkey.c_str());
 
         // rewind file pointer
         rewind(fpp);
@@ -136,7 +137,38 @@ void printCommitObject(const char *key, const char *path)
         exit(0);
     }
 
-    printf("Author: \t%s\nData: \t%s\n\n%s\n",buf->author,buf->committime,buf->commitmessage);
+    printf("Author:\t%s\nData:  \t%s\n\t%s\n\n",buf->author,buf->committime,buf->commitmessage);
     free(buf);
     fclose(fp);
+}
+
+void printCommitTree(const char *key, const char *path){
+/// todo: print(HEAD -> master)
+    printf("commit %s\n", key);
+    string keyvalue = key;
+    string dir = path;
+    dir = dir + ".docxit/object/" + keyvalue.substr(0,2) + '/' + keyvalue.substr(2,38);
+    FILE *fp = fopen(dir.c_str(),"rb");
+    if(fp == NULL){
+        printf("fatal error: %s: cannot open file\n", dir.c_str());
+        exit(0);
+    }
+    CommitStruct *buf = (CommitStruct *)malloc(sizeof(CommitStruct));
+    if(fread(buf, sizeof(CommitStruct), 1, fp) == 0){
+        printf("fatal: %s%s: read file error\n", "commit object ", key);
+        exit(0);
+    }
+
+    printf("Author:\t%s\nData:  \t%s\n\t%s\n\n",buf->author,buf->committime,buf->commitmessage);
+
+    // copy parent attribute
+    int pn = buf->parentnum;
+    char pkey[2][41];
+    memcpy(pkey, buf->parentkey, sizeof(pkey));
+
+    // free memory
+    free(buf);
+    fclose(fp);
+
+    while(pn) printCommitTree(pkey[-- pn], path);
 }

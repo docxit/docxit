@@ -24,7 +24,7 @@ CFLAGS=-Wall -O3
 endif
 
 
-all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config
+all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config $(BUILD_DIR)log
 
 all_debug: $(BUILD_DIR)printIndex $(BUILD_DIR)printConfig
 
@@ -129,7 +129,7 @@ $(BUILD_DIR)deinit: $(SRC_DIR)$(C_DIR)deinit.c
 $(BUILD_DIR)addIndex: $(SRC_DIR)$(C_DIR)addIndex.cpp $(BUILD_DIR)sha1.o $(BUILD_DIR)blobCreate.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)docxitPath.o
 	$(CXX) $(CFLAGS) $^ -o $@ -lpthread 
 
-$(BUILD_DIR)commit: $(SRC_DIR)$(C_DIR)commit.cpp $(BUILD_DIR)sha1.o $(BUILD_DIR)blobCreate.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)shellCommand.o
+$(BUILD_DIR)commit: $(SRC_DIR)$(C_DIR)commit.cpp $(BUILD_DIR)sha1.o $(BUILD_DIR)blobCreate.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)configOp.o
 	$(CXX) $(CFLAGS) $^ -o $@
 
 $(BUILD_DIR)removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c $(BUILD_DIR)indexOp.o
@@ -153,6 +153,9 @@ $(BUILD_DIR)printConfig: $(SRC_DIR)$(C_DIR)printConfig.cpp $(BUILD_DIR)configOp.
 	$(CXX) $(CFLAGS) $^ -o $@
 
 $(BUILD_DIR)config: $(SRC_DIR)$(C_DIR)config.cpp $(BUILD_DIR)configOp.o $(BUILD_DIR)shellCommand.o
+	$(CXX) $(CFLAGS) $^ -o $@
+	
+$(BUILD_DIR)log: $(SRC_DIR)$(C_DIR)log.cpp $(BUILD_DIR)commitTree.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)configOp.o
 	$(CXX) $(CFLAGS) $^ -o $@
 	
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
@@ -204,6 +207,7 @@ install_release:
 	cp $(BUILD_DIR)removeIndex $(EXE_DIR)removeIndex
 	cp $(BUILD_DIR)commit $(EXE_DIR)commit
 	cp $(BUILD_DIR)config $(EXE_DIR)config
+	cp $(BUILD_DIR)log $(EXE_DIR)log
 	cp $(BUILD_DIR)fileop.jar $(EXE_DIR)fileop.jar
 	cp -r $(LIB_DIR) $(EXE_DIR)externallib 
 
