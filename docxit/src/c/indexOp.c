@@ -24,7 +24,7 @@ Records openIndex(const char *indexFileName){
         printf("fatal error: malloc failed\n");
         exit(0);
     }
-    if(fread(p, sizeof(DocxitRecord), fileSize, fp) == 0){
+    if(fread(p, sizeof(DocxitRecord), fileSize, fp) == -1){
         printf("fatal: %s: read file error\n", "index");
         exit(0);
     }
@@ -89,6 +89,7 @@ void writeRecordsToFile(const char *indexFileName, Records rec){
 
 int commitIndex(const char *indexFileName){
 // 0 clear, 1 have changed
+
     Records rec = openIndex(indexFileName);
 
     int i, ret = 0;
