@@ -5,6 +5,7 @@
 #include<string.h>
 #include<string>
 #include"shellCommand.h"
+#include "configOp.h"
 
 using namespace std;
 
@@ -32,7 +33,7 @@ void writeCommitStructToFile(const CommitStruct *cf, const char *filename);
 
 void freeCommitStruct(CommitStruct **cs);
 
-void insertCommitObjectToTree(const char *key);
+void insertCommitObjectToTree(const char *key, const char *path);
 //open file current branch(save in file HEAD), pass the key to parent_key, open parent_key file and write key into it, open key file and write parent_key into it,
 //change the key in current branch into key
 //if root is null, change root into key, change the branch in HEAD into key
@@ -41,6 +42,6 @@ void printTree();
 //open root dfs, post order travel, print tree
 void printCommitObject(const char *key, const char *path);
 
-
+void printCommitTree(const char *key, const char *path);
 
 #endif // COMMITTREE_H
