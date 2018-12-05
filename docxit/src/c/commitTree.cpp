@@ -166,9 +166,9 @@ void printCommitTree(const char *key, const char *path, const char *currentBranc
 
     printf("commit  %s  ", key);
 
-    // is key a branch
+    // print branch
     string grepstr = "cd ";
-    grepstr = grepstr + path + ".docxit/refs/heads/ ;grep '" + key + "' *";
+    grepstr = grepstr + path + ".docxit/refs/heads/ ;[ -n \"`ls`\" ]&&grep '" + key + "' *";
     grepstr = shellCommand(grepstr);
     auto alls = split(grepstr, "\n");
     for (const auto &allbr: alls) {
@@ -178,6 +178,18 @@ void printCommitTree(const char *key, const char *path, const char *currentBranc
         if(s != currentBranch)printf(" (%s) ", s.c_str());
         else printf(" (HEAD -> %s) ", s.c_str());
     }
+
+    // print tag
+    grepstr = "cd ";
+    grepstr = grepstr + path + ".docxit/refs/tags/ ;[ -n \"`ls`\" ]&&grep '" + key + "' *";
+    grepstr = shellCommand(grepstr);
+    auto allt = split(grepstr, "\n");
+    for (const auto &allbr: allt) {
+        int len = allbr.find(':');
+        if(len == -1) continue;
+        printf(" (tag: %s) ", allbr.substr(0, len).c_str());
+    }
+
     printf("\n");
 
     string keyvalue = key;
