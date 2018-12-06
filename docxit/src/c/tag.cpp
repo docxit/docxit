@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 {
     if(argc < 3)
     {
-        char *argv1[] = {argv[1],NULL};
+        char *argv1[] = {"showTag", argv[1], NULL};
         if(execv(EXE_DIR"showTag", argv1) == -1)
         {
             perror(EXE_DIR"showTag");
@@ -23,28 +23,36 @@ int main(int argc, char *argv[])
     }
     else if(argc < 4)
     {
-        char *argv1[] = {argv[1], argv[2], NULL};
+        char *argv1[] = {"createTag", argv[1], argv[2], NULL};
         if(execv(EXE_DIR"createTag", argv1) == -1)
         {
             perror(EXE_DIR"createTag");
             exit(0);
         }
     }
-    else if(strcmp(argv[2], "-d") == 0)
+    else if(*argv[2] == '-')
     {
-        for(int i = 3; i < argc; i++)
+        if(strcmp(argv[2], "-d") == 0)
         {
-            char argv1[] = {argv[1], argv[i], NULL};
-            if(execv(EXE_DIR"deleteTag", argv1) == -1)
+            for(int i = 3; i < argc; i++)
             {
-                perror(EXE_DIR"deleteTag");
-                exit(0);
+                char argv1[] = {"deleteTag", argv[1], argv[i], NULL};
+                if(execv(EXE_DIR"deleteTag", argv1) == -1)
+                {
+                    perror(EXE_DIR"deleteTag");
+                    exit(0);
+                }
             }
+
+        }
+        else
+        {
+            cout << TAGUSAGE;
         }
     }
     else
     {
-        char *argv1[] = {argv[1], argv[2], argv[3], NULL};
+        char *argv1[] = {"createTag",argv[1], argv[2], argv[3], NULL};
         if(execv(EXE_DIR"createTag", argv1) == -1)
         {
             perror(EXE_DIR"createTag");
