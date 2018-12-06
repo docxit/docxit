@@ -32,8 +32,7 @@ static void checkDocxitPath(char *argv[]){
 /// file name contains ' ' can't add !!!
 /// todo: checkout should change work space. reset
 /// todo: two branch commit same version
-/// todo: enough test
-/// tag
+/// todo: status and other enough test, in child dir of repo
 int main(int argc, char *argv[])
 {
     //TODO: alias
