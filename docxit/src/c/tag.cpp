@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include<iostream>
+#include <sys/wait.h>
 #include<string.h>
 #define EXE_DIR "/usr/local/lib/docxit/"
 
@@ -37,15 +38,13 @@ int main(int argc, char *argv[])
     {
         if(strcmp(argv[2], "-d") == 0)
         {
-
-            char *argv1[] = {(char *)"deleteTag", argv[1], argv[i], NULL};
             pid_t *pids = (pid_t *)malloc(sizeof(pid_t)*(argc - 3));
             for(int i = 3; i < argc; i++)
             {
                 pids[i-3] = fork();
                 if(pids[i-3] == 0)
                 {
-                    char argv1[] = {"deleteTag", argv[1], argv[i], NULL};
+                    char *argv1[] = {(char *)"deleteTag", argv[1], argv[i], NULL};
                     if(execv(EXE_DIR"deleteTag", argv1) == -1)
                     {
                         perror(EXE_DIR"deleteTag");
@@ -58,8 +57,7 @@ int main(int argc, char *argv[])
                 }
 
             }
-            for(int i = 3; i < argc; i++)
-                wait(pids[i-3]);
+            for(int i = 3; i < argc; i++) waitpid(pids[i-3], NULL, 0);
             free(pids);
 
         }
