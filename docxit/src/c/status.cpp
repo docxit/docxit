@@ -32,7 +32,7 @@ int findAllFilesNotExist(Records rec){
             ret = 1;
             printf("\tremove: %s\n", name);
         }
-        else {
+        else if(rec.base[i].kind != removed){
             string sha = valueSHA_1(name);
             if((rec.base[i].kind == changed && rec.base[i].newkey != sha) ||
                (rec.base[i].kind == add && rec.base[i].key != sha) ||
