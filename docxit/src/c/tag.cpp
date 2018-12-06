@@ -27,6 +27,11 @@ int main(int argc, char *argv[])
     }
     else if(argc < 4)
     {
+        if(*argv[2] == '-')
+        {
+            cout << TAGUSAGE;
+            return 0;
+        }
         char *argv1[] = {(char *)"createTag", argv[1], argv[2], NULL};
         if(execv(EXE_DIR"createTag", argv1) == -1)
         {
