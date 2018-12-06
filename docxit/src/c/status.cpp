@@ -82,15 +82,15 @@ int main(int argc, char *argv[]){
     if(!first) printf("\n");
     if(first == 0){
         if(clean){
-            printf("提交为空，但是存在尚未跟踪的文件\n");
+            printf("nothing to commit, some file not tracked\n");
         }
         else{
-            printf("有要提交的文件，使用 docxit commit -m <info> 提交\n");
+            printf("there exist some file to commit , use docxit commit -m <info> to commit\n");
         }
     }
     else{
         if(clean == 0){
-            printf("有要提交的文件，使用 docxit commit -m <info> 提交\n");
+            printf("there exist some file to commit , use docxit commit -m <info> to commit\n");
         }
         else{
             if(fret == 0)printf("clean workspace, nothing to commit!\n");
