@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
         string sha1Index = valueSHA_1(indexpath);
         string indexname = ".docxit/";
         indexname = indexname + INDEX_FILE_NAME;
+        indexname = docxitroot + indexname;
         blobCreate(indexname, sha1Index, docxitroot.c_str());
         CommitStruct *cf = createCommitStruct(sha1Index.c_str(), argv[3]);
         writeCommitStructToFile(cf, ".docxit_commit_tempfile");
