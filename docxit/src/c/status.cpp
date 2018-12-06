@@ -1,5 +1,6 @@
 #include "indexOp.h"
 #include "getBranch.h"
+#include "sha1.h"
 #include <vector>
 
 static std::vector<std::string> split(const std::string &str, const std::string &delim)
@@ -19,7 +20,31 @@ static std::vector<std::string> split(const std::string &str, const std::string 
     return spiltCollection;
 }
 
-
+int findAllFilesNotExist(Records rec){
+    int i, ret = 0;
+    for(i = 0; i < rec.length; i ++){
+        const char *name = getRecordName(&rec.base[i]);
+        char ins[4096];
+        sprintf(ins, "[ ! -f %s ] && echo -n y", name);
+        string isRm = shellCommand(ins);
+        if(isRm == "y" && rec.base[i].kind != removed){
+            if(ret == 0) printf("Unstaged changes:\n");
+            ret = 1;
+            printf("\tremove: %s\n", name);
+        }
+        else {
+            string sha = valueSHA_1(name);
+            if((rec.base[i].kind == changed && rec.base[i].newkey != sha) ||
+               (rec.base[i].kind == add && rec.base[i].key != sha) ||
+               (rec.base[i].kind == unchanged && rec.base[i].key != sha)){
+                if(ret == 0) printf("Unstaged changes:\n");
+                ret = 1;
+                printf("\tchange: %s\n", name);
+            }
+        }
+    }
+    return ret;
+}
 
 int main(int argc, char *argv[]){
     char indexpath[4096] = {'\0'};
@@ -38,9 +63,15 @@ int main(int argc, char *argv[]){
     cmd = shellCommand(cmd);
     auto allfile = split(cmd, "\n");
 
+    // find all files in index but not exist
+    int fret = findAllFilesNotExist(rec);
+    if(fret) printf("\nUse docxit add <file_name> to stage changes\n\n");
+
+    // find all files that exist but not in index
     for (const auto &s: allfile) {
         if(s == "") continue;
-        if(getPtrOfDocxitRecord(rec, s.c_str()) == NULL){
+        RecordPtr ptr = getPtrOfDocxitRecord(rec, s.c_str());
+        if(ptr == NULL || isRecordKind(ptr, removed)){
             if(first){
                 first = 0;
                 printf("Untracked files:\n");
@@ -62,7 +93,7 @@ int main(int argc, char *argv[]){
             printf("有要提交的文件，使用 docxit commit -m <info> 提交\n");
         }
         else{
-            printf("clean workspace, nothing to commit!\n");
+            if(fret == 0)printf("clean workspace, nothing to commit!\n");
         }
     }
     freeRecords(&rec);

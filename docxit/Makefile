@@ -164,7 +164,7 @@ $(BUILD_DIR)branch: $(SRC_DIR)$(C_DIR)branch.cpp $(BUILD_DIR)shellCommand.o
 $(BUILD_DIR)checkout: $(SRC_DIR)$(C_DIR)checkout.cpp $(BUILD_DIR)shellCommand.o 
 	$(CXX) $(CFLAGS) $^ -o $@
 	
-$(BUILD_DIR)status: $(SRC_DIR)$(C_DIR)status.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o  $(BUILD_DIR)getBranch.o  
+$(BUILD_DIR)status: $(SRC_DIR)$(C_DIR)status.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o  $(BUILD_DIR)getBranch.o  $(BUILD_DIR)sha1.o
 	$(CXX) $(CFLAGS) $^ -o $@
 	
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
