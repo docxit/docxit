@@ -33,16 +33,39 @@ int main(int argc, char *argv[])
             exit(0);
         }
     }
-    else if(strcmp(argv[2], "-d") == 0)
+    else if(*argv[2] == '-')
     {
-        for(int i = 3; i < argc; i++)
+        if(strcmp(argv[2], "-d") == 0)
         {
+
             char *argv1[] = {(char *)"deleteTag", argv[1], argv[i], NULL};
-            if(execv(EXE_DIR"deleteTag", argv1) == -1)
+            pid_t *pids = (pid_t *)malloc(sizeof(pid_t)*(argc - 3));
+            for(int i = 3; i < argc; i++)
             {
-                perror(EXE_DIR"deleteTag");
-                exit(0);
+                pids[i-3] = fork();
+                if(pids[i-3] == 0)
+                {
+                    char argv1[] = {"deleteTag", argv[1], argv[i], NULL};
+                    if(execv(EXE_DIR"deleteTag", argv1) == -1)
+                    {
+                        perror(EXE_DIR"deleteTag");
+                        exit(0);
+                    }
+                }
+                else if(pids[i-3] < 0)
+                {
+                    cout << "can't fork child process!" << endl;
+                }
+
             }
+            for(int i = 3; i < argc; i++)
+                wait(pids[i-3]);
+            free(pids);
+
+        }
+        else
+        {
+            cout << TAGUSAGE;
         }
     }
     else
