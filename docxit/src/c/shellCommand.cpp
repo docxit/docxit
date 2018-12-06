@@ -3,7 +3,7 @@
 string shellCommand(string command)//read at most 128 bytes
 {
     FILE *fpr;
-    char buffer[256];
+    char buffer[65536];
     fpr = popen(command.c_str(), "r");
     if(!fpr){
         perror(command.c_str());
@@ -13,7 +13,7 @@ string shellCommand(string command)//read at most 128 bytes
     if(num == 0){
         return "";
     }
-    else if(num >= 255){
+    else if(num >= 65534){
         printf("fatal: instruction too long\n");
         exit(0);
     }

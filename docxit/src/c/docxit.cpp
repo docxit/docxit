@@ -34,6 +34,9 @@ static void checkDocxitPath(char *argv[]){
 /// todo: two branch commit same version
 /// todo: enough test, in child dir of repo
 /// tag
+/// change Chinese to Engish
+/// in dir commit bug
+/// todo: status cannot work when rm file.
 int main(int argc, char *argv[])
 {
     //TODO: alias

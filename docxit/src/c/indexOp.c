@@ -87,6 +87,25 @@ void writeRecordsToFile(const char *indexFileName, Records rec){
     fclose(fp);
 }
 
+int printStatus(Records rec){
+    int i, ret = 0;
+    for(i = 0; i < rec.length; i ++){
+        if(rec.base[i].kind != unchanged){
+            if(ret == 0){
+                ret = 1;
+                printf("Changes to commit:\n");
+            }
+            switch(getRecordKind(&rec.base[i])){
+                case add: printf("\tadd:    %s\n", getRecordName(&rec.base[i])); break;
+                case removed: printf("\tremove: %s\n", getRecordName(&rec.base[i])); break;
+                case changed: printf("\tchange: %s\n", getRecordName(&rec.base[i])); break;
+                default: break;
+            }
+        }
+    }
+    return ret;
+}
+
 int commitIndex(const char *indexFileName){
 // 0 clear, 1 have changed
 

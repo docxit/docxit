@@ -118,6 +118,8 @@ void deleteDocxitRecordByPtr(RecordPtr ptr);
 
 void writeRecordsToFile(const char *indexFileName, Records rec);
 
+int printStatus(Records rec);   // 0: all unchanged
+
 int commitIndex(const char *indexFileName);
 
 #ifdef DEBUG
