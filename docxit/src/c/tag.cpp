@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include<iostream>
 #include<string.h>
 #define EXE_DIR "/usr/local/lib/docxit/"
@@ -14,7 +17,7 @@ int main(int argc, char *argv[])
 {
     if(argc < 3)
     {
-        char *argv1[] = {argv[1],NULL};
+        char *argv1[] = {(char *)"showTag", argv[1],NULL};
         if(execv(EXE_DIR"showTag", argv1) == -1)
         {
             perror(EXE_DIR"showTag");
@@ -23,7 +26,7 @@ int main(int argc, char *argv[])
     }
     else if(argc < 4)
     {
-        char *argv1[] = {argv[1], argv[2], NULL};
+        char *argv1[] = {(char *)"createTag", argv[1], argv[2], NULL};
         if(execv(EXE_DIR"createTag", argv1) == -1)
         {
             perror(EXE_DIR"createTag");
@@ -34,7 +37,7 @@ int main(int argc, char *argv[])
     {
         for(int i = 3; i < argc; i++)
         {
-            char argv1[] = {argv[1], argv[i], NULL};
+            char *argv1[] = {(char *)"deleteTag", argv[1], argv[i], NULL};
             if(execv(EXE_DIR"deleteTag", argv1) == -1)
             {
                 perror(EXE_DIR"deleteTag");
@@ -44,7 +47,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        char *argv1[] = {argv[1], argv[2], argv[3], NULL};
+        char *argv1[] = {(char *)"createTag", argv[1], argv[2], argv[3], NULL};
         if(execv(EXE_DIR"createTag", argv1) == -1)
         {
             perror(EXE_DIR"createTag");

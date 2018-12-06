@@ -2,8 +2,8 @@
 
 # docxitPath, tagname
 
-commitkey=`cat `cat $docxitPath"/.docxit/HEAD"``
-
+head=`cat $1".docxit/HEAD"`
+commitkey=`cat $head`
 tfile=$1".docxit/refs/tags/"$2
 if [ -f $tfile ]
 then
