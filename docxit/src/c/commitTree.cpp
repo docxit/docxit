@@ -10,19 +10,60 @@ void changeIndex(const char *commitkey, const char *path)
     string objpath = commitobjpath;
     commitobjpath = commitobjpath + key.substr(0,2);
     commitobjpath = commitobjpath + "/" + key.substr(2,38);
-    void *buff = (CommitStruct *)malloc(sizeof(CommitStruct));
     FILE *fh = fopen(commitobjpath.c_str(), "rb");
-    fread(buff, sizeof(CommitStruct), 1, fh);
+    if(fh == NULL){
+        printf("fatal: %s: commit key error or cannot find commit object\n", commitkey);
+        exit(0);
+    }
+    void *buff = (CommitStruct *)malloc(sizeof(CommitStruct));
+    if(fread(buff, sizeof(CommitStruct), 1, fh) == 0){
+        printf("fatal: read commit object error\n");
+        exit(0);
+    }
     key = ((CommitStruct *)buff)->key;
     free(buff);
     fclose(fh);
     string indexobjpath = objpath + key.substr(0,2) + "/" + key.substr(2,38);
-    cout << "commitbojpath : " << commitobjpath << endl;
+//    cout << "commitbojpath : " << commitobjpath << endl;
     string cmdcp = "cp " + indexobjpath + " " + path + ".docxit/index";
-    cout << "cmdcp : " << cmdcp << endl;
+//    cout << "cmdcp : " << cmdcp << endl;
     shellCommand(cmdcp);
 }
 
+string changePrevIndex(const char *commitkey, const char *path, int n)
+{
+    string commitobjpath = "";
+    string key = commitkey;
+    commitobjpath = commitobjpath + path;
+    commitobjpath = commitobjpath + ".docxit/object/";
+    string objpath = commitobjpath;
+    commitobjpath = commitobjpath + key.substr(0,2);
+    commitobjpath = commitobjpath + "/" + key.substr(2,38);
+
+    FILE *fh = fopen(commitobjpath.c_str(), "rb");
+    if(fh == NULL){
+        printf("fatal: %s: commit key error or cannot find commit object\n", commitkey);
+        exit(0);
+    }
+    void *buff = (CommitStruct *)malloc(sizeof(CommitStruct));
+    if(fread(buff, sizeof(CommitStruct), 1, fh) == 0){
+        printf("fatal: read commit object error\n");
+        exit(0);
+    }
+
+    if(((CommitStruct *)buff)->parentnum == 0){
+        printf("error: prev number to large: reach root commit\n");
+        exit(0);
+    }
+    key = ((CommitStruct *)buff)->parentkey[0];
+    free(buff);
+    fclose(fh);
+    if(n == 1)
+        changeIndex(key, path);
+        return key;
+    else
+        return changePrevIndex(key, path, n - 1);
+}
 
 CommitStruct *createCommitStruct(const char *key, const char *message)
 {
