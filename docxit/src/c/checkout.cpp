@@ -3,6 +3,8 @@
 #include<string.h>
 #include<vector>
 #include"shellCommand.h"
+#include "commitTree.h"
+#include "switchVersion.h"
 
 static void printHelp(){
     printf("\
@@ -27,6 +29,9 @@ int main(int argc, char *argv[])
         if(system(cbi.c_str()) == -1){
             printf("fatal: switch to branch failed\n");
         }
+        string key = shellCommand("cat " + path);
+        //changeIndex(key.c_str(), argv[1]);
+        switchVersion(argv[1]);
     }
 
     // create and switch to a branch

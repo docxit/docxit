@@ -11,7 +11,7 @@ void switchVersion(string path){
             exit(0);
         }
         if(system(key.c_str()) == -1){
-            printf("fatal: %s: cannot execute\n", key,c_str());
+            printf("fatal: %s: cannot execute\n", key.c_str());
             exit(0);
         }
     }
