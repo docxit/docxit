@@ -26,6 +26,9 @@ typedef struct
 //branch master is created while docxit init is executed
 //root is created while docxit init is executed, inited with null
 string changePrevIndex(const char *commitkey, const char *path, int n);
+
+string changeNextIndex(const char *commitkey, const char *path, int n);
+
 void changeIndex(const char *commitkey, const char *path);
 
 CommitStruct *createCommitStruct(const char *key, const char *message);

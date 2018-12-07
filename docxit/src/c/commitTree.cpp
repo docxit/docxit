@@ -63,6 +63,9 @@ string changePrevIndex(const char *commitkey, const char *path, int n)
         printf("error: prev number to large: reach root commit\n");
         exit(0);
     }
+    else if(((CommitStruct *)buff)->parentnum > 1){
+        printf("Warning: automatically go through the first branch\n");
+    }
     key = ((CommitStruct *)buff)->parentkey[0];
     free(buff);
     fclose(fh);
@@ -73,6 +76,50 @@ string changePrevIndex(const char *commitkey, const char *path, int n)
     else
         return changePrevIndex(key.c_str(), path, n - 1);
 }
+
+string changeNextIndex(const char *commitkey, const char *path, int n)
+{
+    if(n < 1){
+        printf("error: next number '%d' should be not less than 1\n", n);
+        exit(0);
+    }
+    string commitobjpath = "";
+    string key = commitkey;
+    commitobjpath = commitobjpath + path;
+    commitobjpath = commitobjpath + ".docxit/object/";
+    string objpath = commitobjpath;
+    commitobjpath = commitobjpath + key.substr(0,2);
+    commitobjpath = commitobjpath + "/" + key.substr(2,38);
+
+    FILE *fh = fopen(commitobjpath.c_str(), "rb");
+    if(fh == NULL){
+        printf("fatal: %s: commit key error or cannot find commit object\n", commitkey);
+        exit(0);
+    }
+    void *buff = (CommitStruct *)malloc(sizeof(CommitStruct));
+    if(fread(buff, sizeof(CommitStruct), 1, fh) == 0){
+        printf("fatal: read commit object error\n");
+        exit(0);
+    }
+
+    if(((CommitStruct *)buff)->childnum == 0){
+        printf("error: next number to large: reach the last commit\n");
+        exit(0);
+    }
+    else if(((CommitStruct *)buff)->childnum > 1){
+        printf("Warning: automatically go through the first branch\n");
+    }
+    key = ((CommitStruct *)buff)->childkey[0];
+    free(buff);
+    fclose(fh);
+    if(n == 1){
+        changeIndex(key.c_str(), path);
+        return key;
+    }
+    else
+        return changeNextIndex(key.c_str(), path, n - 1);
+}
+
 
 CommitStruct *createCommitStruct(const char *key, const char *message)
 {

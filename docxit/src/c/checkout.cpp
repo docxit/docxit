@@ -26,16 +26,12 @@ int main(int argc, char *argv[])
     // switch to a branch
     else if(argc == 3){
         if(*argv[2] == '-') printHelp();
-        string str = shellCommand("pwd");
-        if(str.substr(0, str.length() - 1) + "/" != argv[1]){
-            printf("error: please execute in repository root `%s`\n", argv[1]);
-            exit(0);
-        }
         string path = argv[1];
         path = path + ".docxit/refs/heads/" + argv[2];
         string cbi = "if [ ! -f " + path + " ]; then echo \"error: branch '" + argv[2] + "' not found\"\nelse\n\techo -n '" + path + "'>" + argv[1] + ".docxit/HEAD\necho \"switch to branch '" + argv[2] + "'\"\nfi";
         if(system(cbi.c_str()) == -1){
             printf("fatal: switch to branch failed\n");
+            exit(0);
         }
         string key = shellCommand("[ -f " + path + " ]&&echo -n y");
         if(key == "y"){
