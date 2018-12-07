@@ -29,9 +29,12 @@ int main(int argc, char *argv[])
         if(system(cbi.c_str()) == -1){
             printf("fatal: switch to branch failed\n");
         }
-        string key = shellCommand("cat " + path);
-        //changeIndex(key.c_str(), argv[1]);
-        switchVersion(argv[1]);
+        string key = shellCommand("[ -f " + path + " ]&&echo -n y");
+        if(key == "y"){
+            key = shellCommand("cat " + path);
+            changeIndex(key.c_str(), argv[1]);
+            switchVersion(argv[1]);
+        }
     }
 
     // create and switch to a branch
