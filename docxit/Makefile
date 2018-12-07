@@ -24,7 +24,7 @@ CFLAGS=-Wall -O3
 endif
 
 
-all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config $(BUILD_DIR)log $(BUILD_DIR)branch $(BUILD_DIR)checkout $(BUILD_DIR)status $(BUILD_DIR)tag
+all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config $(BUILD_DIR)log $(BUILD_DIR)branch $(BUILD_DIR)checkout $(BUILD_DIR)status $(BUILD_DIR)tag $(BUILD_DIR)reset
 
 all_debug: $(BUILD_DIR)printIndex $(BUILD_DIR)printConfig
 
@@ -167,6 +167,9 @@ $(BUILD_DIR)checkout: $(SRC_DIR)$(C_DIR)checkout.cpp $(BUILD_DIR)shellCommand.o 
 $(BUILD_DIR)status: $(SRC_DIR)$(C_DIR)status.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o  $(BUILD_DIR)getBranch.o  $(BUILD_DIR)sha1.o
 	$(CXX) $(CFLAGS) $^ -o $@
 	
+$(BUILD_DIR)reset: $(SRC_DIR)$(C_DIR)reset.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o  $(BUILD_DIR)getBranch.o  $(BUILD_DIR)switchVersion.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)configOp.o
+	$(CXX) $(CFLAGS) $^ -o $@
+	
 $(BUILD_DIR)tag: $(SRC_DIR)$(C_DIR)tag.cpp
 	$(CXX) $(CFLAGS) $^ -o $@
 	
@@ -233,6 +236,7 @@ install_release:
 	cp $(BUILD_DIR)checkout $(EXE_DIR)checkout
 	cp $(BUILD_DIR)status $(EXE_DIR)status
 	cp $(BUILD_DIR)tag $(EXE_DIR)tag
+	cp $(BUILD_DIR)reset $(EXE_DIR)reset
 	cp $(BUILD_DIR)fileop.jar $(EXE_DIR)fileop.jar
 	cp -r $(LIB_DIR) $(EXE_DIR)externallib 
 

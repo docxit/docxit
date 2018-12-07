@@ -3,6 +3,10 @@
 
 void changeIndex(const char *commitkey, const char *path)
 {
+    if(strlen(commitkey) != 40){
+        printf("fatal: %s: commit key length error\n", commitkey);
+        exit(0);
+    }
     string commitobjpath = "";
     string key = commitkey;
     commitobjpath = commitobjpath + path;
@@ -32,6 +36,10 @@ void changeIndex(const char *commitkey, const char *path)
 
 string changePrevIndex(const char *commitkey, const char *path, int n)
 {
+    if(n < 1){
+        printf("error: prev number '%d' should be not less than 1\n", n);
+        exit(0);
+    }
     string commitobjpath = "";
     string key = commitkey;
     commitobjpath = commitobjpath + path;
@@ -58,11 +66,12 @@ string changePrevIndex(const char *commitkey, const char *path, int n)
     key = ((CommitStruct *)buff)->parentkey[0];
     free(buff);
     fclose(fh);
-    if(n == 1)
-        changeIndex(key, path);
+    if(n == 1){
+        changeIndex(key.c_str(), path);
         return key;
+    }
     else
-        return changePrevIndex(key, path, n - 1);
+        return changePrevIndex(key.c_str(), path, n - 1);
 }
 
 CommitStruct *createCommitStruct(const char *key, const char *message)

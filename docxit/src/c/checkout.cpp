@@ -9,7 +9,10 @@
 static void printHelp(){
     printf("\
 Usage: docxit checkout <branch_name>        switch to branch\n\
-       docxit checkout -b <new_branch>      create and switch to a new branch\n");
+       docxit checkout -b <new_branch>      create and switch to a new branch\n\
+\n\
+Warning: make sure you have committed your changeds before executing checkout, or they will be lost\n\
+");
 
     exit(0);
 }
@@ -23,6 +26,11 @@ int main(int argc, char *argv[])
     // switch to a branch
     else if(argc == 3){
         if(*argv[2] == '-') printHelp();
+        string str = shellCommand("pwd");
+        if(str.substr(0, str.length() - 1) + "/" != argv[1]){
+            printf("error: please execute in repository root `%s`\n", argv[1]);
+            exit(0);
+        }
         string path = argv[1];
         path = path + ".docxit/refs/heads/" + argv[2];
         string cbi = "if [ ! -f " + path + " ]; then echo \"error: branch '" + argv[2] + "' not found\"\nelse\n\techo -n '" + path + "'>" + argv[1] + ".docxit/HEAD\necho \"switch to branch '" + argv[2] + "'\"\nfi";
@@ -33,7 +41,7 @@ int main(int argc, char *argv[])
         if(key == "y"){
             key = shellCommand("cat " + path);
             changeIndex(key.c_str(), argv[1]);
-            switchVersion(argv[1]);
+            switchVersion(argv[1], "null");
         }
     }
 

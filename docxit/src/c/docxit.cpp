@@ -30,6 +30,7 @@ static void checkDocxitPath(char *argv[]){
 }
 
 /// file name contains ' ' can't add !!!
+/// checkout will rm all uncommited files
 /// todo: status and other enough test, use doc to test, in child dir of repo
 int main(int argc, char *argv[])
 {
