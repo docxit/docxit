@@ -7,10 +7,18 @@ void changeIndex(const char *commitkey, const char *path)
     string key = commitkey;
     commitobjpath = commitobjpath + path;
     commitobjpath = commitobjpath + ".docxit/object/";
+    string objpath = commitobjpath;
     commitobjpath = commitobjpath + key.substr(0,2);
     commitobjpath = commitobjpath + "/" + key.substr(2,38);
+    void *buff = (CommitStruct *)malloc(sizeof(CommitStruct));
+    FILE *fh = fopen(commitobjpath.c_str(), "rb");
+    fread(buff, sizeof(CommitStruct), 1, fh);
+    key = ((CommitStruct *)buff)->key;
+    free(buff);
+    fclose(fh);
+    string indexobjpath = objpath + key.substr(0,2) + "/" + key.substr(2,38);
     cout << "commitbojpath : " << commitobjpath << endl;
-    string cmdcp = "cp " + commitobjpath + " " + path + ".docxit/index";
+    string cmdcp = "cp " + indexobjpath + " " + path + ".docxit/index";
     cout << "cmdcp : " << cmdcp << endl;
     shellCommand(cmdcp);
 }
