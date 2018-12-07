@@ -26,6 +26,8 @@ typedef struct
 //branch master is created while docxit init is executed
 //root is created while docxit init is executed, inited with null
 
+void changeIndex(const char *commitkey, const char *path);
+
 CommitStruct *createCommitStruct(const char *key, const char *message);
 //create a file that records commit key, author, commit time and commit message
 //create the file's blob obj and return it's key value
