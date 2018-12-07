@@ -1,5 +1,21 @@
 #include"commitTree.h"
 
+
+void changeIndex(const char *commitkey, const char *path)
+{
+    string commitobjpath = "";
+    string key = commitkey;
+    commitobjpath = commitobjpath + path;
+    commitobjpath = commitobjpath + ".docxit/object/";
+    commitobjpath = commitobjpath + key.substr(0,2);
+    commitobjpath = commitobjpath + "/" + key.substr(2,38);
+    cout << "commitbojpath : " << commitobjpath << endl;
+    string cmdcp = "cp " + commitobjpath + " " + path + ".docxit/index";
+    cout << "cmdcp : " << cmdcp << endl;
+    shellCommand(cmdcp);
+}
+
+
 CommitStruct *createCommitStruct(const char *key, const char *message)
 {
     CommitStruct *cs = (CommitStruct *)malloc(sizeof(CommitStruct));
