@@ -3,6 +3,8 @@
 #include<string.h>
 #include<vector>
 #include"shellCommand.h"
+#include "commitTree.h"
+#include "switchVersion.h"
 
 static void printHelp(){
     printf("\
@@ -26,6 +28,12 @@ int main(int argc, char *argv[])
         string cbi = "if [ ! -f " + path + " ]; then echo \"error: branch '" + argv[2] + "' not found\"\nelse\n\techo -n '" + path + "'>" + argv[1] + ".docxit/HEAD\necho \"switch to branch '" + argv[2] + "'\"\nfi";
         if(system(cbi.c_str()) == -1){
             printf("fatal: switch to branch failed\n");
+        }
+        string key = shellCommand("[ -f " + path + " ]&&echo -n y");
+        if(key == "y"){
+            key = shellCommand("cat " + path);
+            changeIndex(key.c_str(), argv[1]);
+            switchVersion(argv[1]);
         }
     }
 

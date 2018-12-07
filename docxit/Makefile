@@ -161,7 +161,7 @@ $(BUILD_DIR)log: $(SRC_DIR)$(C_DIR)log.cpp $(BUILD_DIR)commitTree.o $(BUILD_DIR)
 $(BUILD_DIR)branch: $(SRC_DIR)$(C_DIR)branch.cpp $(BUILD_DIR)shellCommand.o 
 	$(CXX) $(CFLAGS) $^ -o $@
 	
-$(BUILD_DIR)checkout: $(SRC_DIR)$(C_DIR)checkout.cpp $(BUILD_DIR)shellCommand.o 
+$(BUILD_DIR)checkout: $(SRC_DIR)$(C_DIR)checkout.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)configOp.o $(BUILD_DIR)switchVersion.o $(BUILD_DIR)indexOp.o
 	$(CXX) $(CFLAGS) $^ -o $@
 	
 $(BUILD_DIR)status: $(SRC_DIR)$(C_DIR)status.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o  $(BUILD_DIR)getBranch.o  $(BUILD_DIR)sha1.o
@@ -192,6 +192,9 @@ $(BUILD_DIR)configOp.o: $(SRC_DIR)$(C_DIR)configOp.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
 $(BUILD_DIR)getBranch.o: $(SRC_DIR)$(C_DIR)getBranch.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
+
+$(BUILD_DIR)switchVersion.o: $(SRC_DIR)$(C_DIR)switchVersion.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
 .PHONY: clean rebuild install install_debug install_release uninstall

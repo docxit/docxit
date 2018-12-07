@@ -33,6 +33,7 @@ static void checkDocxitPath(char *argv[]){
 /// todo: checkout should change work space. reset
 /// todo: two branch commit same version
 /// todo: status and other enough test, in child dir of repo
+/// use doc to test
 int main(int argc, char *argv[])
 {
     //TODO: alias
