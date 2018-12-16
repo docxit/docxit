@@ -5,7 +5,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		String[] suffix = args[1].split("\\.",2);
-		String className = suffix[1] + "Operation";
+		String className;
+		if(suffix.length <= 1) className = "";
+		else className = suffix[1] + "Operation";
 		Class<?> op = null;
 		try {
 			op = Class.forName("docxit."+className);
