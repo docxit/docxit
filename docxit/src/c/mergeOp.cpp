@@ -12,6 +12,11 @@ string getHeadBranch(const char *docxitpath)
     return branchname;
 }
 
+void resetByIndex(const char *docxitpath)
+{
+
+}
+
 int isBranch(const char *branchname, const char *docxitpath)
 {
     int flag = 0;
