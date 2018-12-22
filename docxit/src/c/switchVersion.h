@@ -6,6 +6,6 @@
 
 using namespace std;
 
-void switchVersion(string path);
+void switchVersion(string path, string newkey);
 
 #endif // __SWITCH_VERSION_H__

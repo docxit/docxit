@@ -24,7 +24,7 @@ CFLAGS=-Wall -O3
 endif
 
 
-all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config $(BUILD_DIR)log $(BUILD_DIR)branch $(BUILD_DIR)checkout $(BUILD_DIR)status $(BUILD_DIR)tag
+all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)config $(BUILD_DIR)log $(BUILD_DIR)branch $(BUILD_DIR)checkout $(BUILD_DIR)status $(BUILD_DIR)tag $(BUILD_DIR)reset $(BUILD_DIR)diff $(BUILD_DIR)listen $(BUILD_DIR)sendto $(BUILD_DIR)merge $(BUILD_DIR)fileop.jar
 
 all_debug: $(BUILD_DIR)printIndex $(BUILD_DIR)printConfig
 
@@ -138,6 +138,9 @@ $(BUILD_DIR)removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c $(BUILD_DIR)indexOp.o
 $(BUILD_DIR)printIndex: $(SRC_DIR)$(C_DIR)printIndex.cpp $(BUILD_DIR)indexOp.o $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellCommand.o
 	$(CXX) $(CFLAGS) $^ -o $@
 
+$(BUILD_DIR)merge: $(SRC_DIR)$(C_DIR)merge.cpp $(BUILD_DIR)mergeOp.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)switchVersion.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)configOp.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)mergeRecords.o
+	$(CXX) $(CFLAGS) $^ -o $@
+
 $(BUILD_DIR)fileop.jar: $(BUILD_DIR)java
 	jar cvfm $@ $^/META-INF/MANIFEST.MF -C $^ .
 	
@@ -167,10 +170,25 @@ $(BUILD_DIR)checkout: $(SRC_DIR)$(C_DIR)checkout.cpp $(BUILD_DIR)shellCommand.o 
 $(BUILD_DIR)status: $(SRC_DIR)$(C_DIR)status.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o  $(BUILD_DIR)getBranch.o  $(BUILD_DIR)sha1.o
 	$(CXX) $(CFLAGS) $^ -o $@
 	
+$(BUILD_DIR)reset: $(SRC_DIR)$(C_DIR)reset.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o  $(BUILD_DIR)getBranch.o  $(BUILD_DIR)switchVersion.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)configOp.o
+	$(CXX) $(CFLAGS) $^ -o $@
+	
 $(BUILD_DIR)tag: $(SRC_DIR)$(C_DIR)tag.cpp
 	$(CXX) $(CFLAGS) $^ -o $@
 	
+$(BUILD_DIR)listen: $(SRC_DIR)$(C_DIR)listen.cpp $(BUILD_DIR)configOp.o $(BUILD_DIR)mergeRecords.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)switchVersion.o
+	$(CXX) $(CFLAGS) $^ -o $@
+	
+$(BUILD_DIR)sendto: $(SRC_DIR)$(C_DIR)sendto.cpp $(BUILD_DIR)configOp.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o
+	$(CXX) $(CFLAGS) $^ -o $@
+	
+$(BUILD_DIR)diff: $(SRC_DIR)$(C_DIR)diff.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o
+	$(CXX) $(CFLAGS) $^ -o $@
+	
 $(BUILD_DIR)docxitPath.o: $(SRC_DIR)$(C_DIR)docxitPath.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@ 
+
+$(BUILD_DIR)mergeOp.o: $(SRC_DIR)$(C_DIR)mergeOp.cpp 
 	$(CXX) $(CFLAGS) -c $^ -o $@ 
 
 $(BUILD_DIR)shellCommand.o: $(SRC_DIR)$(C_DIR)shellCommand.cpp
@@ -195,6 +213,9 @@ $(BUILD_DIR)getBranch.o: $(SRC_DIR)$(C_DIR)getBranch.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
 $(BUILD_DIR)switchVersion.o: $(SRC_DIR)$(C_DIR)switchVersion.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
+
+$(BUILD_DIR)mergeRecords.o: $(SRC_DIR)$(C_DIR)mergeRecords.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
 .PHONY: clean rebuild install install_debug install_release uninstall
@@ -233,6 +254,11 @@ install_release:
 	cp $(BUILD_DIR)checkout $(EXE_DIR)checkout
 	cp $(BUILD_DIR)status $(EXE_DIR)status
 	cp $(BUILD_DIR)tag $(EXE_DIR)tag
+	cp $(BUILD_DIR)diff $(EXE_DIR)diff
+	cp $(BUILD_DIR)reset $(EXE_DIR)reset
+	cp $(BUILD_DIR)listen $(EXE_DIR)listen
+	cp $(BUILD_DIR)sendto $(EXE_DIR)sendto
+	cp $(BUILD_DIR)merge $(EXE_DIR)merge
 	cp $(BUILD_DIR)fileop.jar $(EXE_DIR)fileop.jar
 	cp -r $(LIB_DIR) $(EXE_DIR)externallib 
 

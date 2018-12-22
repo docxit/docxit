@@ -9,7 +9,10 @@
 static void printHelp(){
     printf("\
 Usage: docxit checkout <branch_name>        switch to branch\n\
-       docxit checkout -b <new_branch>      create and switch to a new branch\n");
+       docxit checkout -b <new_branch>      create and switch to a new branch\n\
+\n\
+Warning: make sure you have committed your changeds before executing checkout, or they will be lost\n\
+");
 
     exit(0);
 }
@@ -28,12 +31,13 @@ int main(int argc, char *argv[])
         string cbi = "if [ ! -f " + path + " ]; then echo \"error: branch '" + argv[2] + "' not found\"\nelse\n\techo -n '" + path + "'>" + argv[1] + ".docxit/HEAD\necho \"switch to branch '" + argv[2] + "'\"\nfi";
         if(system(cbi.c_str()) == -1){
             printf("fatal: switch to branch failed\n");
+            exit(0);
         }
         string key = shellCommand("[ -f " + path + " ]&&echo -n y");
         if(key == "y"){
             key = shellCommand("cat " + path);
             changeIndex(key.c_str(), argv[1]);
-            switchVersion(argv[1]);
+            switchVersion(argv[1], "null");
         }
     }
 
