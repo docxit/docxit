@@ -6,6 +6,7 @@
 #include<string>
 #include"commitTree.h"
 #include"shellCommand.h"
+#include "mergeRecords.h"
 
 using namespace std;
 

@@ -138,7 +138,7 @@ $(BUILD_DIR)removeIndex: $(SRC_DIR)$(C_DIR)removeIndex.c $(BUILD_DIR)indexOp.o
 $(BUILD_DIR)printIndex: $(SRC_DIR)$(C_DIR)printIndex.cpp $(BUILD_DIR)indexOp.o $(BUILD_DIR)docxitPath.o $(BUILD_DIR)shellCommand.o
 	$(CXX) $(CFLAGS) $^ -o $@
 
-$(BUILD_DIR)merge: $(SRC_DIR)$(C_DIR)merge.cpp $(BUILD_DIR)mergeOp.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)switchVersion.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)configOp.o $(BUILD_DIR)indexOp.o
+$(BUILD_DIR)merge: $(SRC_DIR)$(C_DIR)merge.cpp $(BUILD_DIR)mergeOp.o $(BUILD_DIR)commitTree.o $(BUILD_DIR)switchVersion.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)configOp.o $(BUILD_DIR)indexOp.o $(BUILD_DIR)mergeRecords.o
 	$(CXX) $(CFLAGS) $^ -o $@
 
 $(BUILD_DIR)fileop.jar: $(BUILD_DIR)java

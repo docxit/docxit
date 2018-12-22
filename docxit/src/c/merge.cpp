@@ -47,14 +47,12 @@ int main(int argc, char *argv[])
     {
         cout << "not ff" << endl;
         string targetIndex = argv[1];
-        targetIndex += ".docxit/object/";
+        targetIndex += ".docxit/index";
         string key = indexKey(branchname.c_str(), argv[1]);
-        targetIndex += key.substr(0,2) + "/" + key.substr(2,38);
         string sourceIndex = argv[1];
         sourceIndex += ".docxit/object/";
         key = indexKey(argv[4], argv[1]);
         sourceIndex += key.substr(0,2) + "/" + key.substr(2,38);
-        cout << targetIndex << endl << sourceIndex << endl;
         string targetBranchName = branchname;
         string sourceBranchName = argv[4];
         string path = argv[1];
