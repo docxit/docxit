@@ -106,6 +106,7 @@ int printStatus(Records rec){
     return ret;
 }
 
+
 int commitIndex(const char *indexFileName){
 // 0 clear, 1 have changed
 

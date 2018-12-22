@@ -24,7 +24,7 @@ CFLAGS=-Wall -O3
 endif
 
 
-all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config $(BUILD_DIR)log $(BUILD_DIR)branch $(BUILD_DIR)checkout $(BUILD_DIR)status $(BUILD_DIR)tag $(BUILD_DIR)reset $(BUILD_DIR)diff
+all_release: build lib externalbuild $(BUILD_DIR)docxit $(BUILD_DIR)init $(BUILD_DIR)deinit $(BUILD_DIR)addIndex $(BUILD_DIR)removeIndex $(BUILD_DIR)commit $(BUILD_DIR)fileop.jar $(BUILD_DIR)config $(BUILD_DIR)log $(BUILD_DIR)branch $(BUILD_DIR)checkout $(BUILD_DIR)status $(BUILD_DIR)tag $(BUILD_DIR)reset $(BUILD_DIR)diff $(BUILD_DIR)listen $(BUILD_DIR)sendto
 
 all_debug: $(BUILD_DIR)printIndex $(BUILD_DIR)printConfig
 
@@ -173,6 +173,12 @@ $(BUILD_DIR)reset: $(SRC_DIR)$(C_DIR)reset.cpp $(BUILD_DIR)shellCommand.o $(BUIL
 $(BUILD_DIR)tag: $(SRC_DIR)$(C_DIR)tag.cpp
 	$(CXX) $(CFLAGS) $^ -o $@
 	
+$(BUILD_DIR)listen: $(SRC_DIR)$(C_DIR)listen.cpp
+	$(CXX) $(CFLAGS) $^ -o $@
+	
+$(BUILD_DIR)sendto: $(SRC_DIR)$(C_DIR)sendto.cpp $(BUILD_DIR)configOp.o $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o
+	$(CXX) $(CFLAGS) $^ -o $@
+	
 $(BUILD_DIR)diff: $(SRC_DIR)$(C_DIR)diff.cpp $(BUILD_DIR)shellCommand.o $(BUILD_DIR)indexOp.o
 	$(CXX) $(CFLAGS) $^ -o $@
 	
@@ -241,6 +247,8 @@ install_release:
 	cp $(BUILD_DIR)tag $(EXE_DIR)tag
 	cp $(BUILD_DIR)diff $(EXE_DIR)diff
 	cp $(BUILD_DIR)reset $(EXE_DIR)reset
+	cp $(BUILD_DIR)listen $(EXE_DIR)listen
+	cp $(BUILD_DIR)sendto $(EXE_DIR)sendto
 	cp $(BUILD_DIR)fileop.jar $(EXE_DIR)fileop.jar
 	cp -r $(LIB_DIR) $(EXE_DIR)externallib 
 
