@@ -8,6 +8,8 @@
 #include <unistd.h>
 #include <iostream>
 
+#include "mergeRecords.h"
+
 #define SERVPORT 0xd0c   //port number
 #define BACKLOG 10//请求队列中允许的最大请求数
 
@@ -78,7 +80,8 @@ int main(int argc, char *argv[])
         printf("exit from the connection\n");
     }
     else{
-        if(send(client_fd,"OK",3,0) == -1){
+        string ack = "OK"s + argv[1];   // OK<path>
+        if(send(client_fd,ack.c_str(),ack.size() + 1,0) == -1){
             perror("send");
             exit(1);
         }
@@ -109,6 +112,7 @@ int main(int argc, char *argv[])
             exit(0);
         }
 
+        mergeRecords(argv[1] + ".docxit/index"s, argv[1] + ".docxit/indexre"s, "local"s, "remote"s, argv[1]);
     }
     close(sockfd);
     free(buf);

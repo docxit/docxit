@@ -20,10 +20,28 @@ Usage: docxit sendto <remote_user_name>             send to user (in config)\n\
 \n\
 the remote user should first execute `docxit listen`\n\
 "
+static void makeRemoteIndex(string path, string remotePath){
+    string indexp = path + ".docxit/index";
+    string reindexp = path + ".docxit/indexre";
 
-static void package(string path){
+    Records rec = openIndex(indexp.c_str());
+    int n = path.size();
+    int i;
+    for(i = 0; i < rec.length; i ++){
+        string s = rec.base[i].name;
+        s.replace(s.begin(),s.begin()+n, remotePath);    //用s1替换s中从pos开始（包括0）的n个字符的子串
+        //printf("now--: %s\n",s.c_str());
+        setRecordName(&rec.base[i], s.c_str());
+    }
+
+    writeRecordsToFile(reindexp.c_str(), rec);
+    freeRecords(&rec);
+}
+
+static void package(string path, string remotePath){
     printf("packaging ...\n");
-    string cmd = "cd " + path + ";cp .docxit/index .docxit/indexre;tar -zcf docxitremote.tar.gz .docxit/indexre";
+
+    string cmd = "cd " + path + ";tar -zcf docxitremote.tar.gz .docxit/indexre";
     string indexp = path + ".docxit/index";
     Records rec = openIndex(indexp.c_str());
 
@@ -39,6 +57,7 @@ static void package(string path){
         printf("fatal: packing failed\n");
         exit(0);
     }
+    freeRecords(&rec);
 }
 
 int main(int argc,char *argv[]) {
@@ -91,18 +110,22 @@ int main(int argc,char *argv[]) {
 
     printf("waiting for the server to confirm ...\n");
 
-    char buf2[10];
-    if(recv(sockfd,buf2,10,0)== -1) {
+    char buf2[1024];
+    if(recv(sockfd,buf2,1024,0)== -1) {
         perror(addr.c_str());
         exit(1);
     }
 
-    if(strcmp(buf2, "OK")){
+    if(buf2[0] != 'O' || buf2[1] != 'K'){
         printf("your connection has be rejected, exiting\n");
     }
     else{
-        package(argv[1]);
+        string remotepath = &buf2[2];
         string path = argv[1];
+printf("path:%s\nremotePath:%s\n",path.c_str(),remotepath.c_str());
+        makeRemoteIndex( path,  remotepath);
+        package(argv[1], remotepath);
+
         path = path + "docxitremote.tar.gz";
         FILE *fp = fopen(path.c_str(), "rb");
         if(fp == NULL){
