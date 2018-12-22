@@ -105,13 +105,13 @@ int main(int argc, char *argv[])
 
         fwrite(buf, recvbytes, 1, fp);
         fclose(fp);
-
+        printf("dispackaging ...\n");
         string cd = "cd "s + argv[1] + ";tar -zxf docxitremote.tar.gz;rm -f docxitremote.tar.gz";
         if(system(cd.c_str()) == -1){
             printf("fatal: extract failed\n");
             exit(0);
         }
-
+        printf("merging ...\n");
         mergeRecords(argv[1] + ".docxit/index"s, argv[1] + ".docxit/indexre"s, "local"s, "remote"s, argv[1]);
     }
     close(sockfd);

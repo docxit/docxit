@@ -122,7 +122,7 @@ int main(int argc,char *argv[]) {
     else{
         string remotepath = &buf2[2];
         string path = argv[1];
-printf("path:%s\nremotePath:%s\n",path.c_str(),remotepath.c_str());
+//printf("path:%s\nremotePath:%s\n",path.c_str(),remotepath.c_str());
         makeRemoteIndex( path,  remotepath);
         package(argv[1], remotepath);
 
@@ -136,7 +136,7 @@ printf("path:%s\nremotePath:%s\n",path.c_str(),remotepath.c_str());
             printf("fatal: read file error\n");
             exit(0);
         }
-
+        printf("sending ...\n");
         if((sendbytes = send(sockfd,buf,ftell(fp),0)) == -1) {//发送消息给服务器端
             perror(addr.c_str());
             exit(1);
@@ -151,5 +151,6 @@ printf("path:%s\nremotePath:%s\n",path.c_str(),remotepath.c_str());
     }
     close(sockfd);
     free(buf);
+    printf("finish\n");
     return 0;
 }

@@ -25,7 +25,6 @@ void mergeRecords(string targetIndex, string sourceIndex, string targetBranchNam
 
             setRecordName(ptr, tempstr1.c_str());
             setRecordName(&recs.base[i], tempstr2.c_str());
-            recs.base[i].kind = add;
             insertDocxitRecord(&rect, recs.base[i]);
         }
     }
@@ -36,20 +35,38 @@ void mergeRecords(string targetIndex, string sourceIndex, string targetBranchNam
 
     switchVersion(path, "null");
 
-    if(con.size() != 0) printf("\nconflict:\n");
-    for (auto cf : con){
-        printf("\t%s\n", cf.c_str());
-    }
-    for (auto cf : con){
-        int pos = cf.rfind('/');
-        string tempstr1 = cf.substr(0, pos + 1) + targetBranchName + "_" + cf.substr(pos + 1);
-        string tempstr2 = cf.substr(0, pos + 1) + sourceBranchName + "_" + cf.substr(pos + 1);
-        string cmd = "java -jar /usr/local/lib/docxit/fileop.jar merge " + tempstr1 + " " + tempstr2 + " " + cf + " " + targetBranchName + " " + sourceBranchName;
-        if(system(cmd.c_str()) == -1){
-            printf("fatal: java merge failed\n");
-            exit(0);
+    if(con.size() != 0){
+        printf("\nconflict:\n");
+        for (auto cf : con){
+            printf("\t%s\n", cf.c_str());
         }
+        printf("\nanalysing conflicts ...\n");
+        rect = openIndex(targetIndex.c_str());
+        RecordPtr ptr;
+        for (auto cf : con){
+            int pos = cf.rfind('/');
+            string tempstr1 = cf.substr(0, pos + 1) + targetBranchName + "_" + cf.substr(pos + 1);
+            ptr = getPtrOfDocxitRecord(rect, tempstr1.c_str());
+            if(ptr == NULL){
+                printf("fatal: impossible error in mergeRecords.cpp\n");
+                exit(0);
+            }
+            setRecordName(ptr, cf.c_str());
+            string tempstr2 = cf.substr(0, pos + 1) + sourceBranchName + "_" + cf.substr(pos + 1);
+            ptr = getPtrOfDocxitRecord(rect, tempstr2.c_str());
+            if(ptr == NULL){
+                printf("fatal: impossible error in mergeRecords.cpp\n");
+                exit(0);
+            }
+            setRecordKind(ptr, nonexisting);
+            string cmd = "java -jar /usr/local/lib/docxit/fileop.jar merge " + tempstr1 + " " + tempstr2 + " " + cf + " " + targetBranchName + " " + sourceBranchName;
+            if(system(cmd.c_str()) == -1){
+                printf("fatal: java merge failed\n");
+                exit(0);
+            }
+        }
+        writeRecordsToFile(targetIndex.c_str(), rect);
+        freeRecords(&rect);
     }
-
 
 }
