@@ -1,4 +1,5 @@
 #ifndef __COMMITTREE_H__
+#define __COMMITTREE_H__
 #include<stdio.h>
 #include<time.h>
 #include<stdlib.h>
