@@ -1,16 +1,8 @@
-# docxit 函数和协议设计
+# docxit 部分函数和协议设计
 
 ## 目录
 
 [TOC]
-
-## TODO
-
-- [ ] 删除仓库的问题，每次更新 .docxitPath 删除不用的记录或通过命令
-- [x] 自内而外的嵌套初始化仓库问题
-- [x] 修改 `ifstream fh("/home/yxy/.docxitPath");` 为任何人都可用，且不存在文件时不应该报错
-- [x] 添加彻底卸载功能，遍历 `.docxitPath` 删除所有仓库版本文件并最后删除 `.docxitPath`。普通的卸载不会删除这些东西，下次安装可以恢复原来的仓库。
-- [ ] getcwd
 
 
 
