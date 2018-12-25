@@ -73,8 +73,8 @@ public class WordCompareUtil {
         Comments comments = addDocumentCommentsPart(wordMLPackage0, factory0);
         if(objList0.size()!=objList1.size()){
         	System.out.println("WARNING:段落不一致");
-        	System.out.println(objList0.size());
-        	System.out.println(objList1.size());
+        	//System.out.println(objList0.size());
+        	//System.out.println(objList1.size());
             //return false;
         }
         int objSize = objList0.size();  
