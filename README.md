@@ -2,13 +2,13 @@
 
 *A distributed version control tool for docx files.*
 
+
+
 ## Install
 
-You should install `gcc` first.
+You should install `gcc` and java first.
 
-If you want to manage versions for text files simultaneously, you should also install `git`.
-
-Finally, do the following steps to install:
+Next, do the following steps to install:
 
 ```shell
 cd docxit
@@ -31,6 +31,10 @@ cd docxit
 . reinstall.sh
 ```
 
+It will download some external project the first time you install.
+
+
+
 ## Uninstall
 
 If you want to uninstall docxit but preserve your existing repositories (you can reinstall docxit whenever you like) , you should execute:
@@ -46,6 +50,8 @@ If you want to uninstall docxit permanently, that is to say, you want to remove 
 cd docxit
 ./uninstall_permanently.sh
 ```
+
+
 
 ## Debug Mode
 
