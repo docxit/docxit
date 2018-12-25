@@ -54,7 +54,7 @@ public class WordCompareUtil {
     private static BigInteger commentId = BigInteger.valueOf(1);
 
     public int diff(String oldF, String newF, String resultF) throws Exception {
-        boolean diff1 = compare(new File(oldF), new File(newF), resultF);
+    	boolean diff1 = compare(new File(oldF), new File(newF), resultF);
         if(diff1) return 0;
         else return 1;
     }
@@ -72,10 +72,13 @@ public class WordCompareUtil {
 
         Comments comments = addDocumentCommentsPart(wordMLPackage0, factory0);
         if(objList0.size()!=objList1.size()){
-        	System.out.println("ERROR:段落不一致");
-            return false;
+        	System.out.println("WARNING:段落不一致");
+        	System.out.println(objList0.size());
+        	System.out.println(objList1.size());
+            //return false;
         }
         int objSize = objList0.size();  
+        if(objList0.size() > objList1.size()) objSize = objList1.size();
         for (int i = 0, len = objSize; i < len; i++) {
             if (objList0.get(i) instanceof P && !"".equals(objList0.get(i).toString().trim())) {  
                 P p0 = (P) objList0.get(i);
