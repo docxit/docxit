@@ -30,10 +30,8 @@ static void checkDocxitPath(char *argv[]){
 }
 
 /// file name contains ' ' can't add !!!
-/// todo: checkout should change work space. reset
-/// todo: two branch commit same version
-/// todo: status and other enough test, in child dir of repo
-/// use doc to test
+/// checkout will rm all uncommited files
+/// todo: status and other enough test, use doc to test, in child dir of repo
 int main(int argc, char *argv[])
 {
     //TODO: alias
@@ -43,19 +41,21 @@ Usage: docxit [--version] [--help] <command> [<args>]\n\
 \n\
 commands:\n\
     add         docxit add <file1> [<file2> ...]            add or remove files to index\n\
-    commit      docxit commit -m \"<commit_message>\"       ???\n\
-    diff        docxit diff ???                             ???\n\
-    log         docxit log                                  ???\n\
-    status      docxit status                               ???\n\
-    branch      docxit branch [-d] <branch_name>            ???\n\
-    config      docxit config ???                           ???\n\
-    help        docxit help [<command_name>]                show detailed docxit manual\n\
-    merge       docxit merge -m \"<message>\" <branch_name> ???\n\
-    tag         docxit tag \"<tag_name>\" [<commit_value>]  ???\n\
-    checkout    docxit checkout [-b] <new_branch_name>      ???\n\
+    commit      docxit commit -m \"<commit_message>\"         commit changes to docxit\n\
+    diff        docxit diff <filename1> [<filename2> ...]   show difference between filename and its latest version\n\
+    listen      docxit listen                               get ready to receive\n\
+    sendto      docxit sendto [-ip <ip> | <username>]       send current version to remote user\n\
+    log         docxit log                                  show docxit commit log\n\
+    status      docxit status                               show index and workspace status\n\
+    branch      docxit branch [-d] <branch_name>            create or delete branches\n\
+    config      docxit config [options <args>]              set docxit configuration\n\
+    help        docxit help                                 show this help\n\
+    merge       docxit merge -m \"<message>\" <branch_name>   merge two branches\n\
+    tag         docxit tag \"<tag_name>\" [<commit_value>]    tag specific commit\n\
+    checkout    docxit checkout [-b] <new_branch_name>      move to another branch\n\
     deinit      docxit deinit                               delete docxit repository\n\
     init        docxit init                                 init docxit repository at current directory\n\
-    reset       docxit reset ???                            ???\n\
+    reset       docxit reset [options]                      reset workspace to specific version\n\
     version     docxit version                              show docxit version info\n\
 \n\
 \
@@ -67,19 +67,21 @@ Debug: <debug_command> [<args>]\n\
 \n\
 commands:\n\
     add         docxit add <file1> [<file2> ...]            add or remove files to index\n\
-    commit      docxit commit -m \"<commit_message>\"       ???\n\
-    diff        docxit diff ???                             ???\n\
-    log         docxit log                                  ???\n\
-    status      docxit status                               ???\n\
-    branch      docxit branch [-d] <branch_name>            ???\n\
-    config      docxit config ???                           ???\n\
-    help        docxit help [<command_name>]                show detailed docxit manual\n\
-    merge       docxit merge -m \"<message>\" <branch_name> ???\n\
-    tag         docxit tag \"<tag_name>\" [<commit_value>]  ???\n\
-    checkout    docxit checkout [-b] <new_branch_name>      ???\n\
+    commit      docxit commit -m \"<commit_message>\"         commit changes to docxit\n\
+    diff        docxit diff <filename1> [<filename2> ...]   show difference between filename and its latest version\n\
+    log         docxit log                                  show docxit commit log\n\
+    listen      docxit listen                               get ready to receive\n\
+    sendto      docxit sendto [-ip <ip> | <username>]       send current version to remote user\n\
+    status      docxit status                               show index and workspace status\n\
+    branch      docxit branch [-d] <branch_name>            create or delete branches\n\
+    config      docxit config [options <args>]              set docxit configuration\n\
+    help        docxit help                                 show this help\n\
+    merge       docxit merge -m \"<message>\" <branch_name>   merge two branches\n\
+    tag         docxit tag \"<tag_name>\" [<commit_value>]    tag specific commit\n\
+    checkout    docxit checkout [-b] <new_branch_name>      move to another branch\n\
     deinit      docxit deinit                               delete docxit repository\n\
     init        docxit init                                 init docxit repository at current directory\n\
-    reset       docxit reset ???                            ???\n\
+    reset       docxit reset [options]                      reset workspace to specific version\n\
     version     docxit version                              show docxit version info\n\
 \n\
 debug_commands:\n\
@@ -263,9 +265,21 @@ debug_commands:\n\
                     exit(0);
                 }
             }
+            else if(!strcmp(cur, "isten")){
+                checkDocxitPath(argv);
+                if(execv(EXE_DIR"listen", argv) == -1){
+                    perror(EXE_DIR"listen");
+                    exit(0);
+                }
+            }
             else{
                 printf("unknown option: %s\n%s", argv[1], usage);
-                printf("the most similar command is %s\n", "log");
+                if(argv[1][1] == 'o')
+                    printf("the most similar command is %s\n", "log");
+                else if(argv[1][1] == 'i')
+                    printf("the most similar command is %s\n", "listen");
+                else
+                    printf("the most similar command is %s\n", "log listen");
                 exit(0);
             }
 
@@ -305,9 +319,21 @@ debug_commands:\n\
                     exit(0);
                 }
             }
+            else if(!strcmp(cur, "endto")){
+                checkDocxitPath(argv);
+                if(execv(EXE_DIR"sendto", argv) == -1){
+                    perror(EXE_DIR"sendto");
+                    exit(0);
+                }
+            }
             else{
                 printf("unknown option: %s\n%s", argv[1], usage);
-                printf("the most similar command is %s\n", "status");
+                if(argv[1][1] == 't')
+                    printf("the most similar command is %s\n", "status");
+                else if(argv[1][1] == 'e')
+                    printf("the most similar command is %s\n", "sendto");
+                else
+                    printf("the most similar command is %s\n", "status sendto");
                 exit(0);
             }
 

@@ -11,7 +11,10 @@ import docxit.WordMergeUtil;
 public class docxOperation implements FileOperation{
 
 	public int diff(String oldFilePath, String newFilePath) {
-		String resultFilePath = "diff_" + oldFilePath;
+		int index = oldFilePath.lastIndexOf("/");
+        StringBuilder result = new StringBuilder(oldFilePath);
+        result.insert(index+1, "diff_");
+		String resultFilePath = result.toString();
 		WordCompareUtil cp = new WordCompareUtil();
 		try {
 			cp.diff(oldFilePath, newFilePath, resultFilePath);

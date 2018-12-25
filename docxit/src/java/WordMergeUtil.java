@@ -84,8 +84,7 @@ public class WordMergeUtil {
                 if(s0.equals(s1)) {
                 	if((i - index0) != 0) {
                 		boolean isEmpty = true;
-                		for(int k = index0; k < j-1; k++) {
-                			System.out.println("debug");
+                		for(int k = index0; k < j; k++) {
                 			if(objList0.get(k) instanceof P && !"".equals(objList0.get(k).toString().trim()))
                 				isEmpty = false;
                 		}
@@ -101,8 +100,7 @@ public class WordMergeUtil {
                 	}
                 	if((j - index1) != 0) {
                 		boolean isEmpty = true;
-                		for(int k = index1; k < j-1; k++) {
-                			System.out.println("debug");
+                		for(int k = index1; k < j; k++) {
                 			if(objList1.get(k) instanceof P && !"".equals(objList1.get(k).toString().trim()))
                 				isEmpty = false;
                 		}
@@ -132,10 +130,12 @@ public class WordMergeUtil {
     		addsplitline(body, factory2);
     	}
     	if((len1 - index1) > 0) {
+    		addsplitline(body, factory2);
     		while((len1 - index1) != 0) {
         		mp2.addObject(objList1.get(index1));
         		index1++;
         	}
+    		addbranchsymbol(body, factory2, branch1);
     	}
     	wordMLPackage2.save(new File(outpath));
     	if(isconflict) System.out.println("ERROR: 请解决冲突    Filepath:" + outpath);

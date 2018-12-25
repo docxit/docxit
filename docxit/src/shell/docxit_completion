@@ -3,7 +3,7 @@
 
 _docxit_auto_complete()
 {
-	local docxit_opts="add branch checkout commit config deinit diff help init log merge reset status tag version"
+	local docxit_opts="add branch checkout commit config deinit diff help init listen log merge reset sendto status tag version"
 	local docxit_other_opts="--help --version"
 
 	local cur prev files 
